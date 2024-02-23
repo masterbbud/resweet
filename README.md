@@ -24,3 +24,6 @@ uvicorn server:app
 cd app
 flutter run
 
+## NOTES
+
+Connection to PostgreSQL server must be done locally through a database.json file.
