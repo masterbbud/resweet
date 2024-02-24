@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-import psycopg2 as ps
 from configparser import ConfigParser
 import os
 from google.cloud.sql.connector import Connector, IPTypes
