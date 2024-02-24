@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/HomePage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
 
-  // This widget is the root of your application.
+
+  // This widget is the root of your application
+  
+  @override
+  State<MyApp> createState() => AppState();
+}
+
+class AppState extends State<MyApp> {
+
+  List<User> users = List<User>.generate(10, (index) => User(name: "Brandon Faunce", color: Colors.red));
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +42,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomePage(title: 'HomePage', users: users),
     );
   }
 }
