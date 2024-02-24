@@ -23,12 +23,15 @@ def connect_with_connector() -> sqlalchemy.engine.base.Engine:
 
     # NOTE From (https://cloud.google.com/sql/docs/postgres/connect-connectors)
 
-    # get config values
-    # obj = json.load(open('database.json'))
-    # instance_connection_name = obj['name'] # e.g. 'project:region:instance'
-    # db_user = obj['user']  # e.g. 'my-db-user'
-    # db_pass = obj['password']  # e.g. 'my-db-password'
-    # db_name = obj['database']  # e.g. 'my-database'
+    # Load from json file if it exists
+    try:
+        obj = json.load(open('database.json'))
+        os.environ["INSTANCE_CONNECTION_NAME"] = obj['name'] # e.g. 'project:region:instance'
+        os.environ["DB_USER"] = obj['user']  # e.g. 'my-db-user'
+        os.environ["DB_PASS"] = obj['password']  # e.g. 'my-db-password'
+        os.environ["DB_NAME"] = obj['database']  # e.g. 'my-database'
+    except FileNotFoundError:
+        print("No database.json file found. If you are running locally, please create this file.")
 
     instance_connection_name = os.environ[
         "INSTANCE_CONNECTION_NAME"
