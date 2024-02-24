@@ -5,9 +5,21 @@ from google.cloud.sql.connector import Connector, IPTypes
 import pg8000
 import sqlalchemy
 import json
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+origins = [
+    '*'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:
@@ -85,3 +97,11 @@ def test_sql():
     for record in result:
         print(record)
     return {'test_result': str(result)}
+
+@app.get('/receipts')
+def get_receipts(user: str):
+    user1 = {'uuid': '5', 'username': 'joemama24', 'name': 'Joe Mama', 'groupIndex': 0}
+    user2 = {'uuid': '6', 'username': 'joemama25', 'name': 'Jack Mother', 'groupIndex': 1}
+    return {'receipts': [
+        {'name': 'Receipt 1', 'date': '2/24/2024', 'assignee': user1, 'items': [{'name': 'Apple', 'price': 10, 'payers': [user1, user2]}]}
+    ]}

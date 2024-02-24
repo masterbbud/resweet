@@ -16,7 +16,7 @@ class Receipt {
         'name': String name,
         'date': String date,
         'assignee': Map<String, dynamic> assignee,
-        'items': List<Map<String, dynamic>> items
+        'items': List<dynamic> items
       } =>
         Receipt(
           name: name,
@@ -69,7 +69,7 @@ class RItem {
       {
         'name': String name,
         'price': double price,
-        'payers': List<Map<String, dynamic>> payers
+        'payers': List<dynamic> payers
       } =>
         RItem(
           name: name,
@@ -91,7 +91,7 @@ class Group {
     return switch (json) {
       {
         'name': String name,
-        'members': List<Map<String, dynamic>> members
+        'members': List<dynamic> members
       } =>
         Group(
           name: name,

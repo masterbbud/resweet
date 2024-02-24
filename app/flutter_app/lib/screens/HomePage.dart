@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
+import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter_app/screens/NavBar.dart';
+
+final APIManager api = APIManager();
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title, required this.users, required this.transactions, required this.myUser}) : super(key: key);
@@ -37,6 +40,11 @@ class HomePage extends StatelessWidget {
                   },
                 ),
             ),
+            Expanded(
+              child: TextButton(onPressed: () {
+                api.getYourReceipts();
+              }, child: Text("Click")),
+            )
           ],
         ),
       ),

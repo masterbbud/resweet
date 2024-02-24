@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/managers/ApiManager.dart';
+
+final APIManager api = APIManager();
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
