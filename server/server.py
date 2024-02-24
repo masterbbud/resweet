@@ -7,15 +7,10 @@ import pg8000
 import sqlalchemy
 import json
 
-from db.models import *
-import db.users as users
-import db.groups as groups
-import db.receipt_items as receipt_items
-import db.receipts as receipts
+from api import users
 
 app = FastAPI()
-
-
+app.include_router(users.app)
 
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:
     """
@@ -75,6 +70,8 @@ def connect_with_connector() -> sqlalchemy.engine.base.Engine:
 pool = connect_with_connector()
 Session = sessionmaker(pool, expire_on_commit=False)
 
+
+
 @app.get('/')
 def test():
     return {'test_result': True}
@@ -95,7 +92,6 @@ def test_sql():
     return {'test_result': str(result)}
 
 def main():
-    r = receipts.get_by_uuid("0cf9bf55-c31d-4dd3-89bf-536e4ffc8531")
-    print(r.name)
+    pass
     
 main()
