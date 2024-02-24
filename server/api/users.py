@@ -4,7 +4,7 @@ from .mapper import *
 
 app = APIRouter(prefix="/api/user")
 
-@app.get("/{id}")
+@app.get("")
 async def get_user(id: str):
     user = get_by_uuid(id)
 
