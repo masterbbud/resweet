@@ -1,10 +1,14 @@
+from fastapi import APIRouter
 import requests
 
 API_KEY = 'GKN5SwsFMZrYAHnkzLcKle0zNGxt2mlCvPKjV0g5vyW3gBBXpJWFCZaqmT9oQlpW'
 BASE_URL = 'https://api.tabscanner.com/api'
 HEADERS = {'apikey': API_KEY}
 
+router = APIRouter(prefix='/ocr')
 
+
+@router.get('/{token}')
 def get_ocr(token: str):
     """
     Get the OCR result from the TabScanner API based on a token

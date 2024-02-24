@@ -6,10 +6,10 @@ import pg8000
 import sqlalchemy
 import json
 
-# Receipt OCR stuff
-from api.receipt_ocr import get_ocr
+from api import receipt_ocr
 
 app = FastAPI()
+app.include_router(receipt_ocr.router)
 
 
 
@@ -88,13 +88,3 @@ def test_sql():
     for record in result:
         print(record)
     return {'test_result': str(result)}
-
-
-#######################
-# Receipt OCR
-#######################
-
-
-@app.get('/ocr/{token}')
-def get_receipt_info(token: str):
-    return get_ocr(token)
