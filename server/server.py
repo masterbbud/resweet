@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 from configparser import ConfigParser
+from sqlalchemy.orm import sessionmaker
 import os
 from google.cloud.sql.connector import Connector, IPTypes
 import pg8000
 import sqlalchemy
 import json
+
+from db.models import Group
+import db.groups as groups
 
 app = FastAPI()
 
@@ -66,6 +70,7 @@ def connect_with_connector() -> sqlalchemy.engine.base.Engine:
     return pool
 
 pool = connect_with_connector()
+Session = sessionmaker(pool, expire_on_commit=False)
 
 @app.get('/')
 def test():
@@ -85,3 +90,9 @@ def test_sql():
     for record in result:
         print(record)
     return {'test_result': str(result)}
+
+def main():
+    group = groups.get_by_uuid("d14236e5-3f3e-4b61-8462-84955e429acc")
+    print(group.name)
+
+main()
