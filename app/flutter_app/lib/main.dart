@@ -47,7 +47,10 @@ class AppState extends State<MyApp> {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
+                                          onPrimary: Color(0xFF4CC9F0),
+                                          onSecondary: Color(0xFFF96368),
+        ),
         useMaterial3: true,
       ),
       home: HomePage(title: 'HomePage', myUser: myUser, users: users, transactions: transactions),
