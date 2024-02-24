@@ -17,7 +17,17 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text("Welcome "+myUser.name),
+            Container (
+              alignment: Alignment.topLeft,
+                padding: const EdgeInsets.fromLTRB(15, 30, 0, 30),
+                child: Text("Welcome "+myUser.name+"!",
+                    style: TextStyle (
+                        fontSize: 44,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontFamily: 'BagelFatOne'
+                    )
+                )
+            ),
             Expanded(
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
