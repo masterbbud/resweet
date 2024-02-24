@@ -74,7 +74,7 @@ def test_sql():
     query = """
     DROP TABLE IF EXISTS test;
     CREATE TABLE test (testcol int);
-    INSERT INTO test (testcol) VALUES (1);
+    INSERT INTO test (testcol) VALUES (5);
     SELECT * FROM test;
     """
     # This works! Everything is set up :D
