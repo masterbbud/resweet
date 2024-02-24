@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/interfaces.dart';
 import 'package:flutter_app/screens/NavBar.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key, required this.title, required this.users}) : super(key: key);
+  HomePage({Key? key, required this.title, required this.users, required this.transactions, required this.myUser}) : super(key: key);
   final String title;
 
+  final User myUser;
   final List<User> users;
+  final List<Transaction> transactions;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,21 +17,60 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text("Welcome USER"),
-            Row(
-              children: [
-                ListView.builder(
+            Text("Welcome "+myUser.name),
+            Expanded(
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
                   itemCount: users.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return UserGroupIcon(user: User(color: Colors.red, name: "Brandon Faunce"));
+                    final user = users[index];
+                    return UserGroupIcon(user: user);
                   },
-                )
-              ],
+                ),
             ),
-
+            Expanded(
+              child: ListView.builder(
+                  itemCount: transactions.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final transaction = transactions[index];
+                    return TransactionItem(transaction: transaction);
+                  },
+                ),
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class TransactionItem extends StatelessWidget {
+
+  const TransactionItem({Key? key, required this.transaction}) : super(key: key);
+  final Transaction transaction;
+
+
+  @override
+  Widget build(BuildContext context) {
+    final Color c = transaction.amount < 0 ? Colors.red : Colors.green;
+    final String text = transaction.amount > 0 ? "Owes you \$" : "You owe \$";
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(children: [
+              Text(transaction.date),
+              Spacer(),
+              Text(transaction.from),
+              Spacer(),
+              Text(text + transaction.amount.abs().toString(), style: TextStyle(color: c))
+            ],),
+          ),
+          Divider()
+        ],),
+      )
     );
   }
 }
@@ -43,7 +86,7 @@ class UserGroupIcon extends StatelessWidget {
       child: Column(
         children: [
           DecoratedBox(
-            decoration: const BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            decoration: BoxDecoration(color: user.color, borderRadius: BorderRadius.all(Radius.circular(20.0))),
             
             child: SizedBox(
               height: 40.0,
@@ -58,13 +101,10 @@ class UserGroupIcon extends StatelessWidget {
   }
 }
 
-class User {
+class Transaction {
 
-  const User({required this.name, required this.color});
-  final String name;
-  final Color color;
-
-  String getInitials() {
-    return name.split(' ').map((e) => e[0].toUpperCase()).toList().join("");
-  }
+  const Transaction({required this.date, required this.from, required this.amount});
+  final String date;
+  final String from;
+  final int amount;
 }

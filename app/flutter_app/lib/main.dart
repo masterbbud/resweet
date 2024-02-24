@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/interfaces.dart';
 import 'package:flutter_app/screens/HomePage.dart';
 
 void main() {
@@ -17,7 +18,14 @@ class MyApp extends StatefulWidget {
 
 class AppState extends State<MyApp> {
 
-  List<User> users = List<User>.generate(10, (index) => User(name: "Brandon Faunce", color: Colors.red));
+  List<User> users = List<User>.from([User(uuid: "1", name: "Brandon Faunce", color: Colors.red), User(uuid: "1", name: "Raynard Miot", color: Colors.purple), User(uuid: "1", name: "Danil Donchuk", color: Colors.orange), User(uuid: "1", name: "Jan Li", color: Colors.green)]);
+  List<Transaction> transactions = [
+    Transaction(date: "1/11/24", from: "Dan Donchuk", amount: 50),
+    Transaction(date: "1/11/24", from: "Dan Donchuk", amount: -50),
+    Transaction(date: "1/11/24", from: "Dan Donchuk", amount: -50)
+  ];
+
+  User myUser = User(uuid: "1", name: "Brandon Faunce", color: Colors.red);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +50,7 @@ class AppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(title: 'HomePage', users: users),
+      home: HomePage(title: 'HomePage', myUser: myUser, users: users, transactions: transactions),
     );
   }
 }
