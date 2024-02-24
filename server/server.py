@@ -7,8 +7,11 @@ import pg8000
 import sqlalchemy
 import json
 
-from db.models import Group
+from db.models import *
+import db.users as users
 import db.groups as groups
+import db.receipt_items as receipt_items
+import db.receipts as receipts
 
 app = FastAPI()
 
@@ -92,7 +95,7 @@ def test_sql():
     return {'test_result': str(result)}
 
 def main():
-    group = groups.get_by_uuid("d14236e5-3f3e-4b61-8462-84955e429acc")
-    print(group.name)
-
+    r = receipts.get_by_uuid("0cf9bf55-c31d-4dd3-89bf-536e4ffc8531")
+    print(r.name)
+    
 main()

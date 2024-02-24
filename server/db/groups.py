@@ -21,6 +21,6 @@ def get_by_uuid(id: str) -> Group:
             WHERE id = :id
         """))
 
-        groups = s.execute(query, {"id": id}).one_or_none()
+        group = s.execute(query, {"id": id}).one_or_none()
         s.commit()
-        return None if len(groups) == 0 else groups[0]
+        return None if group == None else group[0]

@@ -21,6 +21,6 @@ def get_by_uuid(id: str) -> User:
             WHERE id = :id
         """))
 
-        users = s.execute(query, {"id": id}).one_or_none()
+        user = s.execute(query, {"id": id}).one_or_none()
         s.commit()
-        return None if len(users) == 0 else users[0]
+        return None if user == None else user[0]
