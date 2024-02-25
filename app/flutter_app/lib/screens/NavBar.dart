@@ -8,6 +8,7 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      padding: const EdgeInsets.all(0),
       child: Scaffold (
 
         extendBody: true,
