@@ -15,6 +15,17 @@ def add_group(group: Group) -> Group:
         s.commit()
         return group
     
+def get_group_by_uuid(id : str) -> Group:
+    with server.Session() as s:
+        query = s.query(Group).from_statement(text("""
+            SELECT * FROM groups
+            WHERE id = :id
+        """))
+
+        group = s.execute(query, {"id": id}).one_or_none()
+        s.commit()
+        return None if group == None else group[0]
+    
 def get_group_by_name(name : str) -> Group:
     with server.Session() as s:
         query = s.query(Group).from_statement(text("""

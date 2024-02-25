@@ -53,3 +53,6 @@ class ReceiptPost(BaseModel):
 
 class GroupPost(BaseModel):
     name: str
+
+class InvitePost(BaseModel):
+    group_id: str

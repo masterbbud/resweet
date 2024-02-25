@@ -41,6 +41,17 @@ class Group(Base):
         self.name = name
         super().__init__()
 
+    def add_member(self, user: User):
+        with server.Session() as s:
+            query = text("""
+                INSERT INTO users_groups (user_id, group_id)
+                VALUES (:user_id, :group_id)
+            """)
+
+            s.execute(query, {"user_id": user.id, "group_id": self.id})
+            s.commit()
+
+
     def get_members(self) -> list[User]:
         with server.Session() as s:
             query = s.query(User).from_statement(text("""
@@ -223,3 +234,15 @@ class Receipt(Base):
             items = [item for (item,) in items]
             s.commit()
             return items
+        
+
+class Invite(Base):
+    __tablename__ = "invites"
+    id = Column(Numeric, primary_key=True)
+    group_id = Column(UUID(as_uuid=True))
+    invite_code = Column(String)
+
+    def __init__(self, group_id: str, invite_code: str):
+        self.group_id = group_id
+        self.invite_code = invite_code
+        super().__init__()
