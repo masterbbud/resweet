@@ -21,7 +21,7 @@ class APIManager {
 
   Future<void> getYourReceipts() async {
     final response = await http
-      .get(Uri.http(url, "receipts", {'user': 'myUser'}));
+      .get(Uri.http(url, "api/receipt"), headers: {'token': info.myToken});
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
     final receiptsJson = (body['receipts'] as List<dynamic>);
@@ -40,7 +40,7 @@ class APIManager {
 
   Future<void> getYourAccount() async {
     final response = await http
-      .get(Uri.http(url, "login", {'user': 'myUser'}));
+      .get(Uri.http(url, "api/user"), headers: {'token': info.myToken});
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
 
@@ -58,10 +58,10 @@ class APIManager {
 
   Future<void> getAllUsers() async {
     final response = await http
-      .get(Uri.http(url, "group", {'user': 'myUser'}));
+      .get(Uri.http(url, "group"), headers: {'token': info.myToken});
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
-    final usersJson = (body['users'] as List<dynamic>);
+    final usersJson = (body['members'] as List<dynamic>);
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -78,10 +78,21 @@ class APIManager {
   Future<ReceiptSnapshot> processReceipt(XFile f) async => p.processReceipt(f);
 
 
-  Future<Receipt> confirmReceipt(ReceiptSnapshot receipt, String name, User assignee) async {
+  Future<Receipt> confirmReceipt(ReceiptSnapshot receipt, bool doScale, String name, User assignee) async {
     DateTime now = new DateTime.now();
     DateTime date = new DateTime(now.year, now.month, now.day);
-    return Receipt(name: name, date: "${now.year}-${now.month}-${now.day}", assignee: assignee, items: receipt.items.map((i) => i.toRItem()).toList());
+    double taxMod;
+    if (doScale) {
+      double total = 0.0;
+      for (RSItem rsi in receipt.items) {
+        total += rsi.price;
+      }
+      taxMod = receipt.total / total;
+    }
+    else {
+      taxMod = 1.0;
+    }
+    return Receipt(name: name, date: "${now.year}-${now.month}-${now.day}", assignee: assignee, items: receipt.items.map((i) => i.toRItem(taxMod)).toList());
   }
 
   Future<Receipt> finalizeReceipt(Receipt receipt) async {
@@ -92,7 +103,16 @@ class APIManager {
     });
     print(jsonEncode(Receipt.toJson(receipt)));
     var request = await http.post(Uri.http(url, "api/receipt"), body: jsonEncode(Receipt.toJson(receipt)), headers: {"Content-Type": "application/json"});
+    await getYourReceipts();
     return receipt;
+  }
+
+  Future<void> joinWithCode(String code) async {
+    final response = await http
+      .get(Uri.http(url, "invite/$code"), headers: {'token': info.myToken});
+    await getAllUsers();
+    await getYourReceipts();
+    return;
   }
 }
 

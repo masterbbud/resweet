@@ -7,18 +7,14 @@ import 'package:flutter_app/managers/EverythingManager.dart';
 import 'package:flutter_app/managers/InfoManager.dart';
 import 'package:flutter_app/screens/NavBar.dart';
 
-
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
-  
+
   @override
   State<HomePage> createState() => HomePageState();
-
-  
 }
 
 class HomePageState extends State<HomePage> {
-
   User myUser = nullUser;
   List<User> users = List<User>.empty();
   List<Transaction> transactions = List<Transaction>.empty();
@@ -40,61 +36,49 @@ class HomePageState extends State<HomePage> {
             amount -= subamount;
           }
         }
-        transactions.add(Transaction(date: r.date, from: r.assignee.name, amount: amount, name: r.name, items: items));
+        transactions.add(Transaction(
+            date: r.date,
+            from: r.assignee.name,
+            amount: amount,
+            name: r.name,
+            items: items));
       }
-      
     }
     transactions = transactions;
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-          children: [
-            Container (
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+
+        children: [
+          Container(
               alignment: Alignment.topLeft,
-                padding: const EdgeInsets.fromLTRB(15, 30, 0, 30),
-                child: Text("Welcome "+myUser.name+"!",
-                    style: TextStyle (
-                        fontSize: 44,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontFamily: 'BagelFatOne'
-                    )
-                )
-            ),
-            PhotoCarousel(),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: users.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final user = users[index];
-                      return UserGroupIcon(user: user);
-                    },
-                  ),
+              padding: const EdgeInsets.fromLTRB(15, 30, 0, 30),
+              child: Text("Welcome " + myUser.name + "!",
+                  style: TextStyle(
+                      fontSize: 44,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontFamily: 'BagelFatOne'))),
+          PhotoCarousel(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: transactions.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final transaction = transactions[index];
+                  return TransactionItem(transaction: transaction, parent: this);
+                },
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: transactions.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final transaction = transactions[index];
-                    return TransactionItem(transaction: transaction, parent: this);
-                  },
-                ),
-            ),
-            Expanded(
-              child: TextButton(onPressed: () {
-                api.getYourReceipts();
-              }, child: Text("Click")),
-            )
-          ],
-        ),
-      );
-
+          ),
+          const Spacer()
+        ],
+      ),
+    );
   }
 }
 
@@ -106,12 +90,9 @@ class TransactionItem extends StatefulWidget {
   
   @override
   State<StatefulWidget> createState() => TransactionItemState();
-  
-  
 }
 
 class TransactionItemState extends State<TransactionItem> {
-
   bool showItems = false;
 
   List<SubTransactionWidget> subItems = [];
@@ -119,44 +100,65 @@ class TransactionItemState extends State<TransactionItem> {
   @override
   Widget build(BuildContext context) {
     final Color c = widget.transaction.amount < 0 ? Colors.red : Colors.green;
-    final String text = widget.transaction.amount > 0 ? "Owes you \$" : "You owe \$";
+    final String text =
+        widget.transaction.amount > 0 ? "Owes you \$" : "You owe \$";
     return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
+        child: Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+      child: Column(
+        children: [
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
               if (!showItems) {
                 showItems = true;
-                subItems = widget.transaction.items.map((e) => SubTransactionWidget(st: e)).toList();
-              }
-              else {
+                subItems = widget.transaction.items
+                    .map((e) => SubTransactionWidget(st: e))
+                    .toList();
+              } else {
                 showItems = false;
                 subItems = [];
               }
               widget.parent.setState(() {});
             },
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: [
-                Text(widget.transaction.date),
-                Spacer(),
-                Column(children: [
-                  Text(widget.transaction.from),
-                  Text(widget.transaction.name)
-                ],),
-                
-                Spacer(),
-                Text(text + widget.transaction.amount.abs().toString(), style: TextStyle(color: c))
-              ],),
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(widget.transaction.date),
+                  // Spacer(),
+                  Container(
+                    width: 250,
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.transaction.from,
+                          textAlign: TextAlign.left,
+                        ),
+                        Text(
+                          widget.transaction.name,
+                          textAlign: TextAlign.left,
+                        )
+                      ],
+                    ),
+                  ),
+
+                  // Spacer(),
+                  Text(text + widget.transaction.amount.abs().toString(),
+                      style: TextStyle(color: c))
+                ],
+              ),
             ),
           ),
           ...subItems,
           Divider()
-        ],),
-      )
-    );
+        ],
+      ),
+    ));
   }
 }
 
@@ -168,18 +170,12 @@ class SubTransactionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 4.0),
-      child: Row(children: [
-          Text(st.name),
-          Spacer(),
-          Text('\$${st.amt}')
-        ]
-      ),
+      child: Row(children: [Text(st.name), Spacer(), Text('\$${st.amt}')]),
     );
   }
 }
 
 class UserGroupIcon extends StatelessWidget {
-
   const UserGroupIcon({Key? key, required this.user}) : super(key: key);
   final User user;
   @override
@@ -189,8 +185,9 @@ class UserGroupIcon extends StatelessWidget {
       child: Column(
         children: [
           DecoratedBox(
-            decoration: BoxDecoration(color: user.color, borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            
+            decoration: BoxDecoration(
+                color: user.color,
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
             child: SizedBox(
               height: 40.0,
               width: 40.0,
@@ -205,8 +202,12 @@ class UserGroupIcon extends StatelessWidget {
 }
 
 class Transaction {
-
-  const Transaction({required this.date, required this.from, required this.amount, required this.name, required this.items});
+  const Transaction(
+      {required this.date,
+      required this.from,
+      required this.amount,
+      required this.name,
+      required this.items});
   final String date;
   final String from;
   final double amount;

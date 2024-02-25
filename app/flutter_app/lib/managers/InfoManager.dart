@@ -11,6 +11,8 @@ class InfoManager {
   User myUser = nullUser;
   List<User> allUsers = [];
 
+  String myToken = "";
+
   void setYourReceipts(List<Receipt> receipts) {
     myReceipts = receipts;
   }
@@ -21,5 +23,9 @@ class InfoManager {
 
   void setAllUsers(List<User> users) {
     allUsers = users;
+  }
+
+  void setYourToken(String token) {
+    myToken = token;
   }
 }

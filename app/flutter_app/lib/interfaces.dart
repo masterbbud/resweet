@@ -195,7 +195,7 @@ class RSItem {
   factory RSItem.fromMap(Map<String, dynamic> json) =>
       RSItem(qty: json['qty'], desc: json['descClean'], price: double.parse(json['lineTotal']));
   
-  RItem toRItem() {
-    return RItem(name: desc, price: price, payers: []);
+  RItem toRItem(double scale) {
+    return RItem(name: desc, price: price * scale, payers: []);
   }
 }
