@@ -22,7 +22,9 @@ class APIManager {
 
   Future<void> getYourReceipts() async {
     final response = await http
-      .get(Uri.http(url, "api/receipt"), headers: {'token': info.myToken});
+      .get(Uri.http(url, "api/receipt"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
     final receiptsJson = (body['receipts'] as List<dynamic>);
@@ -41,7 +43,9 @@ class APIManager {
 
   Future<void> getYourAccount() async {
     final response = await http
-      .get(Uri.http(url, "api/user"), headers: {'token': info.myToken});
+      .get(Uri.http(url, "api/user"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
 
@@ -59,7 +63,9 @@ class APIManager {
 
   Future<void> getAllUsers() async {
     final response = await http
-      .get(Uri.http(url, "group"), headers: {'token': info.myToken});
+      .get(Uri.http(url, "group"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
     final usersJson = (body['members'] as List<dynamic>);
@@ -74,6 +80,39 @@ class APIManager {
       throw Exception('Failed to load group account');
     }
     return;
+  }
+
+  Future<String?> signup(String username, String display, String password) async {
+    final uri = Uri.http(url, "api/user");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      'username': username,
+      'display_name': display,
+      'password': password
+    });
+    final res = await http.post(uri, headers: headers, body: body);
+
+    if (res.statusCode != 200) {
+      return null;
+    }
+
+    return await login(username, password);
+  }
+
+  Future<String?> login(String username, String password) async {
+    final uri = Uri.http(url, "api/auth");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      'username': username,
+      'password': password
+    });
+    final res = await http.post(uri, headers: headers, body: body);
+
+    if (res.statusCode != 200) {
+      return null;
+    }
+
+    return jsonDecode(res.body);
   }
 
   Future<ReceiptSnapshot> processReceipt(XFile f) async => p.processReceipt(f);
@@ -110,7 +149,10 @@ class APIManager {
 
   Future<void> joinWithCode(String code) async {
     final response = await http
-      .get(Uri.http(url, "invite/$code"), headers: {'token': info.myToken});
+      .get(Uri.http(url, "invite/$code"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
+
     await getAllUsers();
     await getYourReceipts();
     return;
