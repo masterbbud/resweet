@@ -61,8 +61,19 @@ class ReceiptItem(Base):
         self.price = price
         super().__init__()
 
-    def users_paid(self) -> list[User]:
-        pass
+    def get_users_paid(self) -> list[User]:
+        with server.Session() as s:
+            query = s.query(User).from_statement(text("""
+            SELECT users.* FROM users
+            INNER JOIN items_users
+            ON users.id = items_users.user_paid_id
+            WHERE items_users.item_id = :id
+            """))
+
+            users = s.execute(query, {"id": self.id}).all()
+            users = [user for (user,) in users]
+            s.commit()
+            return users
         
 
 class Receipt(Base):
@@ -77,3 +88,17 @@ class Receipt(Base):
         self.date_entered = datetime.strptime(date_entered, "%Y-%m-%d").date()
         self.user_paid_id = uuid.UUID(user_paid_id)
         super().__init__()
+
+    def get_items(self) -> list[ReceiptItem]:
+        with server.Session() as s:
+            query = s.query(ReceiptItem).from_statement(text("""
+                SELECT items.* FROM items
+                INNER JOIN receipts_items
+                ON items.id = receipts_items.item_id
+                WHERE receipts_items.receipt_id = :id
+            """))
+
+            items = s.execute(query, {"id": self.id}).all()
+            items = [item for (item,) in items]
+            s.commit()
+            return items
