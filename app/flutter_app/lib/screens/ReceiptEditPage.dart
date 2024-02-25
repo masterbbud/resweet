@@ -7,7 +7,7 @@ import 'package:flutter_app/screens/NavBar.dart';
 
 class ReceiptEditPage extends StatefulWidget {
   ReceiptEditPage({Key? key, required this.receipt}) : super(key: key);
-  Receipt receipt;
+  ReceiptSnapshot receipt;
   
   @override
   State<StatefulWidget> createState() => ReceiptEditPageState();
@@ -40,7 +40,7 @@ class ReceiptEditPageState extends State<ReceiptEditPage> {
 }
 
 class ReceiptItem extends StatefulWidget {
-  final Receipt receipt;
+  final RSItem receipt;
 
   ReceiptItem({required this.receipt});
   
@@ -51,7 +51,9 @@ class ReceiptItem extends StatefulWidget {
 class ReceiptItemState extends State<ReceiptItem> {
   @override
   Widget build(BuildContext context) {
-    return null;
+    return Row(children: [
+      
+    ],);
   }
   
 }
