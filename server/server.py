@@ -6,7 +6,10 @@ import pg8000
 import sqlalchemy
 import json
 
+from api import receipt_ocr
+
 app = FastAPI()
+app.include_router(receipt_ocr.router)
 
 
 
