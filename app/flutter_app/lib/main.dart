@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/interfaces.dart';
-import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter_app/managers/EverythingManager.dart';
-import 'package:flutter_app/managers/InfoManager.dart';
 import 'package:flutter_app/screens/GroupPage.dart';
 import 'package:flutter_app/screens/HomePage.dart';
 import 'package:flutter_app/screens/LedgerPage.dart';
@@ -84,21 +81,40 @@ class _NavPageWrapperState extends State<NavPageWrapper> {
   @override
   void initState() {
     super.initState();
-    doInitState().then((_) {setState(() {});});
+    // doInitState().then((_) {setState(() {});});
     
     // .then(() => 
     // api.getYourReceipts().then(() =>
     // setState(() {});
     // ))
-    
+
+    initApp();
   }
 
-  Future<void> doInitState() async {
-    await api.getYourAccount();
-    await api.getYourReceipts();
-    await api.getAllUsers();
-    print(info.myReceipts);
-    setState(() {});
+  // Future<void> doInitState() async {
+  //   await api.getYourAccount();
+  //   await api.getYourReceipts();
+  //   await api.getAllUsers();
+  //   print(info.myReceipts);
+  //   setState(() {});
+  // }
+
+  Future<void> initApp() async {
+    try {
+      await api.getYourAccount();
+      await api.getYourReceipts();
+      await api.getAllUsers();
+      print(info.myReceipts);
+      setState(() {});
+    } catch (e) {
+      print('Init failed: $e');
+    }
+
+    // If setState is called after awaiting above operations, it ensures that
+    // the widget updates with the fetched data.
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
