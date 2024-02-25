@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/interfaces.dart';
+import 'package:flutter_app/screens/PhotoCarousel.dart';
 import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter_app/managers/EverythingManager.dart';
 import 'package:flutter_app/managers/InfoManager.dart';
@@ -51,7 +52,18 @@ class HomePageState extends State<HomePage> {
     return Center(
         child: Column(
           children: [
-            Text("Welcome "+myUser.name),
+            Container (
+              alignment: Alignment.topLeft,
+                padding: const EdgeInsets.fromLTRB(15, 30, 0, 30),
+                child: Text("Welcome "+myUser.name+"!",
+                    style: TextStyle (
+                        fontSize: 44,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontFamily: 'BagelFatOne'
+                    )
+                )
+            ),
+            PhotoCarousel(),
             Expanded(
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
