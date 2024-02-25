@@ -78,7 +78,9 @@ async def process_receipt(file: UploadFile):
         dict: The token for the OCR result
     """
     token = image_to_token(file)
-    WAIT = 1.5
+
+    # Since the OCR takes a bit to process the receipt
+    WAIT = .5
     time.sleep(WAIT)
 
     while True:
