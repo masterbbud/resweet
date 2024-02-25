@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_app/interfaces.dart';
 import 'package:flutter_app/managers/InfoManager.dart';
 
+import '../main.dart';
 import '../managers/EverythingManager.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,12 +16,15 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   User myUser = nullUser;
-  bool dark = false;
+  late bool dark;
+
+
 
   @override
   void initState() {
     super.initState();
     myUser = info.myUser;
+    dark = AppState.of(context).getTheme() == ThemeMode.dark;
   }
 
   @override
@@ -122,6 +126,10 @@ class ProfilePageState extends State<ProfilePage> {
                     Switch(
                       value: dark,
                       onChanged: (bool value) {
+                        if (value)
+                          AppState.of(context).changeTheme(ThemeMode.dark);
+                        else
+                          AppState.of(context).changeTheme(ThemeMode.light);
                         setState(() {
                           dark = value;
                         });

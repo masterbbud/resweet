@@ -25,11 +25,24 @@ class MyApp extends StatefulWidget {
 }
 
 class AppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+  @override
+  AppState createState() => AppState();
+  void changeTheme(ThemeMode themeMode) {
+    setState(() {
+      _themeMode = themeMode;
+    });
+  }
+
+  static AppState of(BuildContext context) =>
+      context.findAncestorStateOfType<AppState>()!;
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      darkTheme: ThemeData.dark(),
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -53,8 +66,11 @@ class AppState extends State<MyApp> {
         useMaterial3: true,
       ),
       home: NavPageWrapper(),
+      themeMode: _themeMode
     );
   }
+
+  ThemeMode getTheme() { return _themeMode;}
 }
 
 class NavPageWrapper extends StatefulWidget {
@@ -111,4 +127,6 @@ class _NavPageWrapperState extends State<NavPageWrapper> {
 
     );
   }
+
+
 }
