@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/screens/PicturePage.dart';
+import 'package:flutter_app/interfaces.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_app/managers/EverythingManager.dart';
+import 'dart:io';
+
+import 'ReceiptEditPage.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key, required this.selectFunc});
@@ -19,11 +24,26 @@ class NavBar extends StatelessWidget {
           width: 75,
           child: FittedBox (
               child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PicturePage()),
-                  );
+              onPressed: () {
+                // pickReceiptFromCamera().then((file) {
+                //   if (file != null) {
+                //     api.processReceipt(file).then((receipt) {
+                //       print(receipt.toString());
+                //       Navigator.push(
+                //         context,
+                //           MaterialPageRoute(builder: (context) => ReceiptEditPage(receipt: receipt)),
+                //         );
+                //       });
+                //     }
+                //   });
+                  pickReceiptFromCamera().then((rcpt) {
+                    if (rcpt != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ReceiptEditPage(receipt: rcpt)),
+                      );
+                    }
+                  });
                 },
                 backgroundColor: Theme.of(context).colorScheme.onSecondary,
                 shape: CircleBorder(),
@@ -78,5 +98,12 @@ class NavBar extends StatelessWidget {
         ),
       )
     );
+  }
+
+  Future<ReceiptSnapshot?> pickReceiptFromCamera() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image == null) return null;
+
+    return await api.processReceipt(image);
   }
 }

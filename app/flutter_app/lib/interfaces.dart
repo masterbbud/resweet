@@ -158,13 +158,17 @@ class ReceiptSnapshot {
   });
 
   factory ReceiptSnapshot.fromMap(Map<String, dynamic> json) =>
-      ReceiptSnapshot(
-          subTotal: double.parse(json['subTotal']),
-          total: double.parse(json['total']),
-          taxes: json['taxes'] as List<double>,
-          items: (json['lineItems'] as List<dynamic>)
-              .map((i) => RSItem.fromMap(i)).toList()
-      );
+    ReceiptSnapshot(
+        subTotal: double.parse(json['subTotal']),
+        total: double.parse(json['total']),
+        taxes: json['taxes'].map<double>((t) => double.parse('$t')).toList(),
+        items: json['lineItems'].map<RSItem>((li) => RSItem.fromMap(li)).toList()
+    );
+
+  @override
+  String toString() {
+    return 'ReceiptSnapshot{subTotal: $subTotal, total: $total, taxes: $taxes, items: $items}';
+  }
 }
 
 class RSItem {
@@ -179,5 +183,5 @@ class RSItem {
   });
 
   factory RSItem.fromMap(Map<String, dynamic> json) =>
-      RSItem(qty: json['qty'], desc: json['descClean'], price: json['lineTotal']);
+      RSItem(qty: json['qty'], desc: json['descClean'], price: double.parse(json['lineTotal']));
 }

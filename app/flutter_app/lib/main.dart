@@ -7,7 +7,6 @@ import 'package:flutter_app/screens/GroupPage.dart';
 import 'package:flutter_app/screens/HomePage.dart';
 import 'package:flutter_app/screens/LedgerPage.dart';
 import 'package:flutter_app/screens/NavBar.dart';
-import 'package:flutter_app/screens/PicturePage.dart';
 import 'package:flutter_app/screens/ProfilePage.dart';
 
 void main() {
@@ -70,7 +69,6 @@ class _NavPageWrapperState extends State<NavPageWrapper> {
 
   final pages = [
     HomePage(),
-    PicturePage(),
     GroupPage(),
     LedgerPage(),
     ProfilePage()

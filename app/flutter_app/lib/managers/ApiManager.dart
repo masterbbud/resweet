@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
 import 'package:flutter_app/managers/InfoManager.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
+import 'ApiManager_web.dart' as p
+  if (dart.library.io) 'ApiManager_io.dart';
 
 
 class APIManager {
@@ -70,15 +74,8 @@ class APIManager {
     return;
   }
 
-  Future<ReceiptSnapshot> processReceipt() async {
-    var request = new http.MultipartRequest("POST", Uri.http(url, "process"));
-    // request.files.add(await http.MultipartFile.fromPath(
-    //     'file',
-    //     'build/brand_receipt8.jpg'
-    // ));
-    var response = await request.send();
-    return ReceiptSnapshot(subTotal: 0, total: 0, taxes: [], items: [RSItem(qty: 1, desc: "Item Name", price: 1.00)]);
-  }
+  Future<ReceiptSnapshot> processReceipt(XFile f) async => p.processReceipt(f);
+
 
   Future<Receipt> confirmReceipt(ReceiptSnapshot receipt) async {
     var request = new http.MultipartRequest("POST", Uri.http(url, "confirm"));
