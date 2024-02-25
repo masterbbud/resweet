@@ -7,7 +7,10 @@ import sqlalchemy
 import json
 from fastapi.middleware.cors import CORSMiddleware
 
+from api import receipt_ocr
+
 app = FastAPI()
+app.include_router(receipt_ocr.router)
 
 origins = [
     '*'
