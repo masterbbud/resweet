@@ -92,6 +92,36 @@ class ProfilePageState extends State<ProfilePage> {
 
             )
           )),
+          Container(
+              alignment: Alignment.centerLeft,
+              // margin: const EdgeInsets.only(top: 30),
+              width: MediaQuery.of(context).size.width,
+              // color: Color(0xFFF9F9F9),
+              child: TextButton(
+
+                  onPressed: () {},
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Text("Edit User Profile",
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 20), textAlign: TextAlign.left,),
+
+                  )
+              )),
+          Container(
+              alignment: Alignment.centerLeft,
+              // margin: const EdgeInsets.only(top: 30),
+              width: MediaQuery.of(context).size.width,
+              color: Color(0xFFF9F9F9),
+              child: TextButton(
+
+                  onPressed: () {},
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Text("Edit User Profile",
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 20), textAlign: TextAlign.left,),
+
+                  )
+              )),
     ]));
   }
 }
