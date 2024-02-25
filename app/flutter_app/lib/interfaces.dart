@@ -1,5 +1,7 @@
 
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Receipt {
@@ -61,13 +63,12 @@ class User {
       {
         'uuid': String uuid,
         'name': String name,
-        'groupIndex': int groupIndex, // TODO FIX
         'username': String username,
       } =>
         User(
           uuid: uuid,
           name: name,
-          color: getColor(groupIndex),
+          color: getColor(1),
           username: username
         ),
       _ => throw const FormatException('Failed to load user.'),
