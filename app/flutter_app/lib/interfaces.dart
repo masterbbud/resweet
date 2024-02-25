@@ -127,3 +127,41 @@ Color getColor(int groupIndex) {
       return Colors.grey;
   }
 }
+
+class ReceiptSnapshot {
+  final double subTotal;
+  final double total;
+  final List<double> taxes;
+  final List<RSItem> items;
+
+  const ReceiptSnapshot({
+    required this.subTotal,
+    required this.total,
+    required this.taxes,
+    required this.items,
+  });
+
+  factory ReceiptSnapshot.fromMap(Map<String, dynamic> json) =>
+      ReceiptSnapshot(
+          subTotal: double.parse(json['subTotal']),
+          total: double.parse(json['total']),
+          taxes: json['taxes'] as List<double>,
+          items: (json['lineItems'] as List<dynamic>)
+              .map((i) => RSItem.fromMap(i)).toList()
+      );
+}
+
+class RSItem {
+  final int qty;
+  final String desc;
+  final double price;
+
+  const RSItem({
+    required this.qty,
+    required this.desc,
+    required this.price
+  });
+
+  factory RSItem.fromMap(Map<String, dynamic> json) =>
+      RSItem(qty: json['qty'], desc: json['descClean'], price: json['lineTotal']);
+}
