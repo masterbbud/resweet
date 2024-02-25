@@ -15,6 +15,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   User myUser = nullUser;
+  bool dark = false;
 
   @override
   void initState() {
@@ -78,50 +79,93 @@ class ProfilePageState extends State<ProfilePage> {
             )
           ])),
       Container(
-        alignment: Alignment.centerLeft,
+          alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(top: 30),
           width: MediaQuery.of(context).size.width,
           color: Color(0xFFF9F9F9),
           child: TextButton(
-
-            onPressed: () {},
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Text("Edit User Profile",
-                style: TextStyle(fontFamily: 'Inter', fontSize: 20), textAlign: TextAlign.left,),
-
-            )
-          )),
-          Container(
-              alignment: Alignment.centerLeft,
-              // margin: const EdgeInsets.only(top: 30),
-              width: MediaQuery.of(context).size.width,
-              // color: Color(0xFFF9F9F9),
-              child: TextButton(
-
-                  onPressed: () {},
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Text("Edit User Profile",
-                      style: TextStyle(fontFamily: 'Inter', fontSize: 20), textAlign: TextAlign.left,),
-
-                  )
-              )),
-          Container(
-              alignment: Alignment.centerLeft,
-              // margin: const EdgeInsets.only(top: 30),
-              width: MediaQuery.of(context).size.width,
-              color: Color(0xFFF9F9F9),
-              child: TextButton(
-
-                  onPressed: () {},
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Text("Edit User Profile",
-                      style: TextStyle(fontFamily: 'Inter', fontSize: 20), textAlign: TextAlign.left,),
-
-                  )
-              )),
+              onPressed: () {},
+              child: SizedBox(
+                height: 60,
+                width: MediaQuery.of(context).size.width,
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Edit User Profile",
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 20),
+                      textAlign: TextAlign.left,
+                    ),
+                  ]
+                )
+              ))),
+      Container(
+          alignment: Alignment.centerLeft,
+          // margin: const EdgeInsets.only(top: 30),
+          width: MediaQuery.of(context).size.width,
+          // color: Color(0xFFF9F9F9),
+          child: TextButton(
+              onPressed: () {setState(() {
+                dark = !dark;
+              });},
+              child: SizedBox(
+                height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(children: [
+                    Text(
+                      "Toggle Dark Mode",
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 20),
+                      textAlign: TextAlign.left,
+                    ),
+                    const Spacer(),
+                    Switch(
+                      value: dark,
+                      onChanged: (bool value) {
+                        setState(() {
+                          dark = value;
+                        });
+                      },
+                    ),
+                  ])))),
+      Container(
+          alignment: Alignment.centerLeft,
+          // margin: const EdgeInsets.only(top: 30),
+          width: MediaQuery.of(context).size.width,
+          color: Color(0xFFF9F9F9),
+          child: TextButton(
+              onPressed: () {},
+              child: SizedBox(
+                height: 60,
+                width: MediaQuery.of(context).size.width,
+                child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Edit User Profile",
+                        style: TextStyle(fontFamily: 'Inter', fontSize: 20),
+                        textAlign: TextAlign.left,
+                      ),
+                    ]
+                )
+              ))),
+      Container(
+          alignment: Alignment.centerLeft,
+          // margin: const EdgeInsets.only(top: 30),
+          width: MediaQuery.of(context).size.width,
+          // color: Color(0xFFF9F9F9),
+          child: TextButton(
+              onPressed: () {},
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  "Sign out",
+                  style: TextStyle(
+                      fontFamily: 'Inter', fontSize: 20, color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ))),
     ]));
   }
 }
