@@ -86,7 +86,7 @@ class ProfilePageState extends State<ProfilePage> {
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(top: 30),
           width: MediaQuery.of(context).size.width,
-          color: Color(0xFFF9F9F9),
+          color: Theme.of(context).colorScheme.onTertiary,
           child: TextButton(
               onPressed: () {},
               child: SizedBox(
@@ -140,7 +140,7 @@ class ProfilePageState extends State<ProfilePage> {
           alignment: Alignment.centerLeft,
           // margin: const EdgeInsets.only(top: 30),
           width: MediaQuery.of(context).size.width,
-          color: Color(0xFFF9F9F9),
+          color: Theme.of(context).colorScheme.onTertiary,
           child: TextButton(
               onPressed: () {},
               child: SizedBox(

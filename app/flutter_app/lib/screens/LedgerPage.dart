@@ -71,7 +71,7 @@ class LedgerPageState extends State<LedgerPage> {
                   fontFamily: "Inter", fontSize: 24),
               value: dropdownValue,
               items: groupMembers.map<DropdownMenuItem<String>>((i) {
-                return DropdownMenuItem<String>(child: Text(i), value: i);
+                return DropdownMenuItem<String>(child: Text(i, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),), value: i);
               }).toList(),
               onChanged: (String? value) {
                 setState(() {
