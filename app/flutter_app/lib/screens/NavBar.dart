@@ -107,7 +107,7 @@ class NavBar extends StatelessWidget {
               IconButton(
                 tooltip: 'Group',
                 icon: const Icon(Icons.group_outlined),
-                onPressed: () {selectFunc(2);},
+                onPressed: () {selectFunc(1);},
                 iconSize: 37.74,
                 color: Colors.white,),
               const Spacer(),
@@ -116,14 +116,14 @@ class NavBar extends StatelessWidget {
               IconButton(
                 tooltip: 'Ledger',
                 icon: const Icon(Icons.folder_outlined),
-                onPressed: () {selectFunc(3);},
+                onPressed: () {selectFunc(2);},
                 iconSize: 37.74,
                 color: Colors.white,),
               const Spacer(),
               IconButton(
                 tooltip: 'Account',
                 icon: const Icon(Icons.account_circle_outlined),
-                onPressed: () {selectFunc(4);},
+                onPressed: () {selectFunc(3);},
                 iconSize: 37.74,
                 color: Colors.white,
               ),
