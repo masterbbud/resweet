@@ -145,7 +145,6 @@ class Group(Base):
             entries = s.execute(query, {"id": self.id}).all()
             entries = [LedgerEntry(str(id), balance) for (id, balance) in entries]
             s.commit()
-            print(entries)
             return entries
 
 
@@ -159,6 +158,18 @@ class ReceiptItem(Base):
         self.name = name
         self.price = price
         super().__init__()
+
+    def add_users_paid(self, users: list[User]):
+        with server.Session() as s:
+            for user in users:
+                print(user.username)
+                query = text("""
+                    INSERT INTO items_users (item_id, user_paid_id)
+                    VALUES (:item_id, :user_id)
+                """)
+
+                s.execute(query, {"item_id": self.id, "user_id": user.id})
+                s.commit()
 
     def get_users_paid(self) -> list[User]:
         with server.Session() as s:
@@ -185,8 +196,19 @@ class Receipt(Base):
     def __init__(self, name: str, date_entered: str, user_paid_id: str):
         self.name = name
         self.date_entered = datetime.strptime(date_entered, "%Y-%m-%d").date()
-        self.user_paid_id = uuid.UUID(user_paid_id)
+        self.user_paid_id = user_paid_id
         super().__init__()
+
+    def add_items(self, items: list[ReceiptItem]) -> None:
+        for item in items:
+            with server.Session() as s:
+                query = text("""
+                    INSERT INTO receipts_items (receipt_id, item_id)
+                    VALUES (:receipt_id, :item_id)
+                """)
+
+                s.execute(query, {"receipt_id": self.id, "item_id": item.id})
+                s.commit()
 
     def get_items(self) -> list[ReceiptItem]:
         with server.Session() as s:

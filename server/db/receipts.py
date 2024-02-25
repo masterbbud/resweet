@@ -3,18 +3,19 @@ from sqlalchemy.sql.expression import text
 
 from .models import Receipt
 
-def add(receipt: Receipt) -> Receipt:
+def add_receipt(receipt: Receipt) -> Receipt:
     with server.Session() as s:
-        query = text("""
+        query = s.query(Receipt).from_statement(text("""
             INSERT INTO receipts (name, date_entered, user_paid_id)
             VALUES (:name, :date, :assignee)
-        """)
+            RETURNING *
+        """))
 
-        s.execute(query, {"name": receipt.name, "date": receipt.date_entered.strftime("%Y-%m-%d"), "assignee": receipt.user_paid_id})
+        receipt = s.execute(query, {"name": receipt.name, "date": receipt.date_entered.strftime("%Y-%m-%d"), "assignee": receipt.user_paid_id}).one_or_none()
         s.commit()
-        return receipt
+        return receipt[0]
     
-def get_by_uuid(id: str) -> Receipt:
+def get_receipt_by_uuid(id: str) -> Receipt:
     with server.Session() as s:
         query = s.query(Receipt).from_statement(text("""
             SELECT * FROM receipts

@@ -3,7 +3,7 @@ from sqlalchemy.sql.expression import text
 
 from .models import Group
 
-def add(group: Group) -> Group:
+def add_group(group: Group) -> Group:
     with server.Session() as s:
         query = text("""
             INSERT INTO groups (name)
