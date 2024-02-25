@@ -5,14 +5,26 @@ from .models import Group
 
 def add_group(group: Group) -> Group:
     with server.Session() as s:
-        query = text("""
+        query = s.query(Group).from_statement(text("""
             INSERT INTO groups (name)
             VALUES (:name)
-        """)
+            RETURNING *
+        """))
 
-        s.execute(query, {"name": group.name})
+        group = s.execute(query, {"name": group.name}).one_or_none()[0]
         s.commit()
         return group
+    
+def get_group_by_name(name : str) -> Group:
+    with server.Session() as s:
+        query = s.query(Group).from_statement(text("""
+            SELECT * FROM groups
+            WHERE name = :name
+        """))
+
+        group = s.execute(query, {"name": name}).one_or_none()
+        s.commit()
+        return None if group == None else group[0]
     
 def get_user_group(user_id : str) -> Group:
     with server.Session() as s:

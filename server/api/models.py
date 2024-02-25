@@ -50,3 +50,6 @@ class ReceiptPost(BaseModel):
     date_entered: str
     assignee_id: str
     items: list[ReceiptItemPost]
+
+class GroupPost(BaseModel):
+    name: str
