@@ -143,7 +143,7 @@ class ProfilePageState extends State<ProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Edit User Profile",
+                        "Settings",
                         style: TextStyle(fontFamily: 'Inter', fontSize: 20),
                         textAlign: TextAlign.left,
                       ),
