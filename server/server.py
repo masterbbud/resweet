@@ -9,6 +9,9 @@ import json
 from api import users, groups, auth, receipts, receipt_ocr, ledger, invite
 import db.groups
 from db.models import *
+from fastapi.middleware.cors import CORSMiddleware
+
+from api import receipt_ocr
 
 app = FastAPI()
 app.include_router(users.app)
@@ -18,6 +21,18 @@ app.include_router(receipts.app)
 app.include_router(receipt_ocr.router)
 app.include_router(ledger.app)
 app.include_router(invite.app)
+
+origins = [
+    '*'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:
@@ -99,7 +114,25 @@ def test_sql():
         print(record)
     return {'test_result': str(result)}
 
+@app.get('/receipts')
+def get_receipts(user: str):
+    user1 = {'uuid': '5', 'username': 'joemama24', 'name': 'Joe Mama', 'groupIndex': 0}
+    user2 = {'uuid': '6', 'username': 'joemama25', 'name': 'Jack Mother', 'groupIndex': 1}
+    return {'receipts': [
+        {'name': 'Receipt 1', 'date': '2/24/2024', 'assignee': user2, 'items': [{'name': 'Apple', 'price': 10, 'payers': [user1, user2]}]}
+    ]}
+
+@app.get('/login')
+def login(user: str):
+    return {'uuid': '5', 'username': 'joemama24', 'name': 'Joe Mama', 'groupIndex': 0}
+
+@app.get('/group')
+def login(user: str):
+    return {'users': [{'uuid': '5', 'username': 'joemama24', 'name': 'Joe Mama', 'groupIndex': 0}, {'uuid': '6', 'username': 'joemama25', 'name': 'Jack Mother', 'groupIndex': 1}]}
+
+
+
 def main():
     pass
-    
+
 main()

@@ -20,10 +20,14 @@ def image_to_token(file: UploadFile):
         dict: The token for the OCR result
     """
     try:
+        print("START IMAGE TO TOKEN")
         url = f'{BASE_URL}/process'
         fileBytes = file.file.read()
+        
+        print("READ TO TOKEN")
         files = {'file': (file.filename, fileBytes, file.content_type)}
         response = requests.post(url, headers=HEADERS, files=files)
+        print("POSTED TO TOKEN")
         json = response.json()
 
         if json['status'] == 'failed':
