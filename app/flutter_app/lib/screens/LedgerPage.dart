@@ -68,10 +68,10 @@ class LedgerPageState extends State<LedgerPage> {
           child: DropdownButton<String>(
               isExpanded: true,
               style: const TextStyle(
-                  fontFamily: "Inter", fontSize: 24, color: Colors.black),
+                  fontFamily: "Inter", fontSize: 24),
               value: dropdownValue,
               items: groupMembers.map<DropdownMenuItem<String>>((i) {
-                return DropdownMenuItem<String>(child: Text(i), value: i);
+                return DropdownMenuItem<String>(child: Text(i, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),), value: i);
               }).toList(),
               onChanged: (String? value) {
                 setState(() {
