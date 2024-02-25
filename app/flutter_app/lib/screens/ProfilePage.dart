@@ -83,11 +83,14 @@ class ProfilePageState extends State<ProfilePage> {
           width: MediaQuery.of(context).size.width,
           color: Color(0xFFF9F9F9),
           child: TextButton(
-            style: ,
+
             onPressed: () {},
-            child: Text("Edit User Profile",
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Text("Edit User Profile",
                 style: TextStyle(fontFamily: 'Inter', fontSize: 20), textAlign: TextAlign.left,),
 
+            )
           )),
     ]));
   }
