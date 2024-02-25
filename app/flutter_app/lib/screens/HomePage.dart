@@ -51,6 +51,8 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+
         children: [
           Container(
               alignment: Alignment.topLeft,
@@ -63,7 +65,7 @@ class HomePageState extends State<HomePage> {
           PhotoCarousel(),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
               scrollDirection: Axis.horizontal,
               itemCount: users.length,
               itemBuilder: (BuildContext context, int index) {
@@ -81,13 +83,7 @@ class HomePageState extends State<HomePage> {
               },
             ),
           ),
-          Expanded(
-            child: TextButton(
-                onPressed: () {
-                  api.getYourReceipts();
-                },
-                child: Text("Click")),
-          )
+          const Spacer()
         ],
       ),
     );
@@ -115,7 +111,7 @@ class TransactionItemState extends State<TransactionItem> {
         widget.transaction.amount > 0 ? "Owes you \$" : "You owe \$";
     return Flexible(
         child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
       child: Column(
         children: [
           GestureDetector(
@@ -133,7 +129,7 @@ class TransactionItemState extends State<TransactionItem> {
               setState(() {});
             },
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
