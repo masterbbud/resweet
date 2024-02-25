@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 
 import '../interfaces.dart';
 
-const String url = "resweet-zr7u3u4ibq-uc.a.run.app";
+//const String url = "resweet-zr7u3u4ibq-uc.a.run.app";
+
+const String url = "127.0.0.1:8000";
 
 Future<ReceiptSnapshot> processReceipt(XFile file) async {
   final imageBytes = await file.readAsBytes();

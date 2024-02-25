@@ -43,18 +43,19 @@ class ReceiptAssignmentPageState extends State<ReceiptAssignmentPage> {
                       child: Column(
                         children: [
                           Text("Assign Items"),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: widget.receipt.items.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    child: ReceiptItem(receipt: widget.receipt.items[index], selectedUser: selectedUser)),
-                                );
-                              },
-                            ),
-                          Spacer(),
+                          Expanded(
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: widget.receipt.items.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: ReceiptItem(receipt: widget.receipt.items[index], selectedUser: selectedUser)),
+                                  );
+                                },
+                              ),
+                          ),
                           Column(
                             children: [
                               TextButton(

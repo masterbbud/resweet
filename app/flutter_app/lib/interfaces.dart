@@ -43,6 +43,9 @@ class Receipt {
     });
     return total;
   }
+
+  static Map<String, dynamic> toJson(Receipt value) =>
+      {'name': value.name, 'date_entered': value.date, 'assignee_id': value.assignee.uuid, 'items': value.items.map((p) => RItem.toJson(p)).toList()};
 }
 
 class User {
@@ -98,6 +101,9 @@ class RItem {
       _ => throw const FormatException('Failed to load RItem.'),
     };
   }
+
+  static Map<String, dynamic> toJson(RItem value) =>
+      {'name': value.name, 'price': value.price, 'payer_ids': value.payers.map((p) => p.uuid).toList()};
 }
 
 class Group {
@@ -172,6 +178,7 @@ class ReceiptSnapshot {
 
   bool isNone() =>
       subTotal == 0 && total == 0 && items.isEmpty;
+
 }
 
 class RSItem {
@@ -187,4 +194,8 @@ class RSItem {
 
   factory RSItem.fromMap(Map<String, dynamic> json) =>
       RSItem(qty: json['qty'], desc: json['descClean'], price: double.parse(json['lineTotal']));
+  
+  RItem toRItem() {
+    return RItem(name: desc, price: price, payers: []);
+  }
 }

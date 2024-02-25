@@ -9,8 +9,8 @@ class PhotoCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(height: 250),
-      items: ['images/shimp.jpg',
-      'images/this_image_goes_so_hard_feel_free_to_screenshot.png',
+      items: ['images/IMG_5301.jpg',
+        'images/oh_yeah.png',
       'images/purin i quit.jpg'].map((i) {
       return Builder(
         builder: (BuildContext context) {

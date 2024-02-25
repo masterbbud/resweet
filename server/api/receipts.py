@@ -12,6 +12,8 @@ app = APIRouter(prefix="/api/receipt")
 
 @app.post("")
 async def create(req: api.ReceiptPost):
+    print(req.name)
+    print(len(req.items))
     items = [add_item(db.ReceiptItem(item.name, item.price)) for item in req.items]
 
     for i in range(len(items)):

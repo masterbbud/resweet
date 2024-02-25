@@ -65,14 +65,17 @@ class HomePageState extends State<HomePage> {
             ),
             PhotoCarousel(),
             Expanded(
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: users.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final user = users[index];
-                    return UserGroupIcon(user: user);
-                  },
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: users.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final user = users[index];
+                      return UserGroupIcon(user: user);
+                    },
+                  ),
+              ),
             ),
             Expanded(
               child: ListView.builder(

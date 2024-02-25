@@ -16,7 +16,8 @@ class APIManager {
 
   final InfoManager info;
 
-  final String url = "resweet-zr7u3u4ibq-uc.a.run.app";
+  //final String url = "resweet-zr7u3u4ibq-uc.a.run.app";
+  final String url = "127.0.0.1:8000";
 
   Future<void> getYourReceipts() async {
     final response = await http
@@ -80,7 +81,7 @@ class APIManager {
   Future<Receipt> confirmReceipt(ReceiptSnapshot receipt, String name, User assignee) async {
     DateTime now = new DateTime.now();
     DateTime date = new DateTime(now.year, now.month, now.day);
-    return Receipt(name: name, date: "$now.month", assignee: assignee, items: [RItem(name: "Item Name", price: 1.00, payers: [])]);
+    return Receipt(name: name, date: "${now.year}-${now.month}-${now.day}", assignee: assignee, items: receipt.items.map((i) => i.toRItem()).toList());
   }
 
   Future<Receipt> finalizeReceipt(Receipt receipt) async {
@@ -89,7 +90,8 @@ class APIManager {
         item.payers.add(receipt.assignee);
       }
     });
-    var request = await http.post(Uri.http(url, "api/receipt"), body: receipt);
+    print(jsonEncode(Receipt.toJson(receipt)));
+    var request = await http.post(Uri.http(url, "api/receipt"), body: jsonEncode(Receipt.toJson(receipt)), headers: {"Content-Type": "application/json"});
     return receipt;
   }
 }

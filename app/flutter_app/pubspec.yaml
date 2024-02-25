@@ -73,6 +73,8 @@ flutter:
      - images/shimp.jpg
      - images/this_image_goes_so_hard_feel_free_to_screenshot.png
      - images/purin i quit.jpg
+     - images/IMG_5301.jpg
+     - images/oh_yeah.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

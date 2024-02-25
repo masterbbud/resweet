@@ -57,35 +57,46 @@ class ReceiptEditPageState extends State<ReceiptEditPage> {
                     ),
                     Column(
                       children: [
-                        Row(children: [
-                          Spacer(),
-                          TextField(
-                            controller: nameController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Name',
-                              hintText: 'Name your purchase'
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Row(children: [
+                            Spacer(),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 100,
+                              height: 40,
+                              child: TextField(
+                                controller: nameController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Name your purchase',
+                                  hintText: 'Name'
+                                ),
+                              ),
                             ),
-                          ),
-                          Spacer()
-                        ],),
+                            Spacer()
+                          ],),
+                        ),
                         Row(children: [
                           Spacer(),
                           Text("Who's paying?"),
-                          DropdownButton<String>(
-                            isExpanded: true,
-                            style: const TextStyle(
-                                fontFamily: "Inter", color: Colors.black),
-                            value: dropdownValue,
-                            items: groupNames.map<DropdownMenuItem<String>>((i) {
-                              return DropdownMenuItem<String>(
-                                  child: Text(i), value: i);
-                            }).toList(),
-                            onChanged: (String? value) {
-                              setState(() {
-                                dropdownValue = value!;
-                              });
-                            }),
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              style: const TextStyle(
+                                  fontFamily: "Inter", color: Colors.black),
+                              value: dropdownValue,
+                              items: groupNames.map<DropdownMenuItem<String>>((i) {
+                                return DropdownMenuItem<String>(
+                                    child: Text(i), value: i);
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  dropdownValue = value!;
+                                });
+                              }),
+                          ),
                           Spacer()
                         ],),
                         Row(children: [
