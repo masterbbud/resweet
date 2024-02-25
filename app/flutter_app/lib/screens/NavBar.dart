@@ -1,9 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/managers/ApiManager.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_app/managers/InfoManager.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key, required this.selectFunc});
@@ -51,6 +46,9 @@ class NavBar extends StatelessWidget {
                       onPressed: () {selectFunc(2);},
                       iconSize: 37.74,
                       color: Colors.white,),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
                   IconButton(
                       tooltip: 'Ledger',
                       icon: const Icon(Icons.folder_outlined),
