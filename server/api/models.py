@@ -23,3 +23,7 @@ class Receipt(BaseModel):
     date_entered: str
     assignee: User
     items: list[ReceiptItem]
+
+class Credentials(BaseModel):
+    username: str
+    password: str

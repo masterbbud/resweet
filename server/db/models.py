@@ -1,8 +1,10 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, UUID, Numeric, DateTime
+from sqlalchemy import Column, String, UUID, Numeric, DateTime, text
 from hashlib import sha256
 from datetime import datetime
 import uuid
+import server
+# from ..server import Session
 
 Base = declarative_base()
 
@@ -30,6 +32,22 @@ class Group(Base):
     def __init__(self, name: str):
         self.name = name
         super().__init__()
+
+    def get_members(self) -> list[User]:
+        with server.Session() as s:
+            query = s.query(User).from_statement(text("""
+                SELECT users.* FROM users
+                INNER JOIN users_groups
+                ON users.id = users_groups.user_id
+                INNER JOIN groups
+                ON groups.id = users_groups.group_id
+                WHERE groups.id = :id
+            """))
+
+            users = s.execute(query, {"id": self.id}).all()
+            users = [user for (user,) in users]
+            s.commit()
+            return users
 
 
 class ReceiptItem(Base):

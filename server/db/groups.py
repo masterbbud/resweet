@@ -14,13 +14,17 @@ def add(group: Group) -> Group:
         s.commit()
         return group
     
-def get_by_uuid(id: str) -> Group:
+def get_user_group(user_id : str) -> Group:
     with server.Session() as s:
         query = s.query(Group).from_statement(text("""
-            SELECT * FROM groups
-            WHERE id = :id
+            SELECT groups.* FROM groups
+            INNER JOIN users_groups
+            ON groups.id = users_groups.group_id
+            INNER JOIN users
+            ON users.id = users_groups.user_id
+            WHERE users.id = :id
         """))
 
-        group = s.execute(query, {"id": id}).one_or_none()
+        group = s.execute(query, {"id": user_id}).one_or_none()
         s.commit()
         return None if group == None else group[0]

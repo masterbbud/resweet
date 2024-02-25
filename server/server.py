@@ -7,13 +7,14 @@ import pg8000
 import sqlalchemy
 import json
 
-from api import users, groups
+from api import users, groups, auth
 import db.groups
 from db.models import *
 
 app = FastAPI()
 app.include_router(users.app)
 app.include_router(groups.app)
+app.include_router(auth.app)
 
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:
     """
