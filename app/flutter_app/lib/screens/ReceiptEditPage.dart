@@ -17,6 +17,25 @@ class ReceiptEditPageState extends State<ReceiptEditPage> {
   bool loading = false;
   bool isChecked = true;
 
+  TextEditingController nameController = TextEditingController(text: '');
+
+  List<String> groupNames = [];
+  String dropdownValue = "";
+  
+  void initState() {
+    groupNames = info.allUsers.map((u) => u.name).toList();
+    dropdownValue = groupNames.first;
+  }
+
+  User getUserByName(String name) {
+    for (User u in info.allUsers) {
+      if (u.name == name) {
+        return u;
+      }
+    }
+    return info.allUsers.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +59,37 @@ class ReceiptEditPageState extends State<ReceiptEditPage> {
                       children: [
                         Row(children: [
                           Spacer(),
+                          TextField(
+                            controller: nameController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Name',
+                              hintText: 'Name your purchase'
+                            ),
+                          ),
+                          Spacer()
+                        ],),
+                        Row(children: [
+                          Spacer(),
+                          Text("Who's paying?"),
+                          DropdownButton<String>(
+                            isExpanded: true,
+                            style: const TextStyle(
+                                fontFamily: "Inter", color: Colors.black),
+                            value: dropdownValue,
+                            items: groupNames.map<DropdownMenuItem<String>>((i) {
+                              return DropdownMenuItem<String>(
+                                  child: Text(i), value: i);
+                            }).toList(),
+                            onChanged: (String? value) {
+                              setState(() {
+                                dropdownValue = value!;
+                              });
+                            }),
+                          Spacer()
+                        ],),
+                        Row(children: [
+                          Spacer(),
                           Checkbox(
                             checkColor: Colors.black,
                             fillColor: MaterialStateProperty.resolveWith((states) {
@@ -60,7 +110,7 @@ class ReceiptEditPageState extends State<ReceiptEditPage> {
                         ],),
                         TextButton(
                           onPressed: () {
-                            api.confirmReceipt(widget.receipt).then((receipt) {
+                            api.confirmReceipt(widget.receipt, nameController.text, getUserByName(dropdownValue)).then((receipt) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => ReceiptAssignmentPage(receipt: receipt)),

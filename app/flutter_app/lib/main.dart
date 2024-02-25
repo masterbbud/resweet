@@ -104,7 +104,6 @@ class _NavPageWrapperState extends State<NavPageWrapper> {
       await api.getYourAccount();
       await api.getYourReceipts();
       await api.getAllUsers();
-      print(info.myReceipts);
       setState(() {});
     } catch (e) {
       print('Init failed: $e');

@@ -37,7 +37,7 @@ class HomePageState extends State<HomePage> {
           if (i.payers.any((p) => p.uuid == myUser.uuid)) {
             double subamount = i.price / i.payers.length;
             items.add(SubTransaction(name: i.name, amt: subamount));
-            amount += subamount;
+            amount -= subamount;
           }
         }
         transactions.add(Transaction(date: r.date, from: r.assignee.name, amount: amount, name: r.name, items: items));
@@ -79,7 +79,7 @@ class HomePageState extends State<HomePage> {
                   itemCount: transactions.length,
                   itemBuilder: (BuildContext context, int index) {
                     final transaction = transactions[index];
-                    return TransactionItem(transaction: transaction);
+                    return TransactionItem(transaction: transaction, parent: this);
                   },
                 ),
             ),
@@ -97,8 +97,9 @@ class HomePageState extends State<HomePage> {
 
 class TransactionItem extends StatefulWidget {
 
-  const TransactionItem({Key? key, required this.transaction}) : super(key: key);
+  const TransactionItem({Key? key, required this.transaction, required this.parent}) : super(key: key);
   final Transaction transaction;
+  final State parent;
   
   @override
   State<StatefulWidget> createState() => TransactionItemState();
@@ -131,7 +132,7 @@ class TransactionItemState extends State<TransactionItem> {
                 showItems = false;
                 subItems = [];
               }
-              setState(() {});
+              widget.parent.setState(() {});
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

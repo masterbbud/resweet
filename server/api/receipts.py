@@ -28,4 +28,3 @@ async def get(req: Request):
     if user is None: raise HTTPException(401, "Authentication failed")
     user_group_id = get_user_group(user.id).id
     return [to_api_receipt(receipt) for receipt in get_all_in_group(user_group_id)]
- 

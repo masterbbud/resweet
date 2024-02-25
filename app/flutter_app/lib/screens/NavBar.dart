@@ -48,6 +48,7 @@ class NavBar extends StatelessWidget {
                     );
 
                     api.processReceipt(image).then((rcpt) {
+                      print(rcpt);
                       // Close the loading modal
                       Navigator.pop(context);
 

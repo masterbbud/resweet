@@ -77,10 +77,10 @@ class APIManager {
   Future<ReceiptSnapshot> processReceipt(XFile f) async => p.processReceipt(f);
 
 
-  Future<Receipt> confirmReceipt(ReceiptSnapshot receipt) async {
-    var request = new http.MultipartRequest("POST", Uri.http(url, "confirm"));
-    var response = await request.send();
-    return Receipt(name: "", date: "", assignee: info.myUser, items: [RItem(name: "Item Name", price: 1.00, payers: [])]);
+  Future<Receipt> confirmReceipt(ReceiptSnapshot receipt, String name, User assignee) async {
+    DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+    return Receipt(name: name, date: "$now.month", assignee: assignee, items: [RItem(name: "Item Name", price: 1.00, payers: [])]);
   }
 
   Future<Receipt> finalizeReceipt(Receipt receipt) async {
@@ -89,8 +89,7 @@ class APIManager {
         item.payers.add(receipt.assignee);
       }
     });
-    var request = new http.MultipartRequest("POST", Uri.http(url, "finalize"));
-    var response = await request.send();
+    var request = await http.post(Uri.http(url, "api/receipt"), body: receipt);
     return receipt;
   }
 }
