@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
+import 'package:flutter_app/managers/ApiManager.dart';
+import 'package:flutter_app/managers/EverythingManager.dart';
+import 'package:flutter_app/managers/InfoManager.dart';
+import 'package:flutter_app/screens/GroupPage.dart';
 import 'package:flutter_app/screens/HomePage.dart';
+import 'package:flutter_app/screens/LedgerPage.dart';
+import 'package:flutter_app/screens/NavBar.dart';
+import 'package:flutter_app/screens/PicturePage.dart';
+import 'package:flutter_app/screens/ProfilePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,15 +25,6 @@ class MyApp extends StatefulWidget {
 }
 
 class AppState extends State<MyApp> {
-
-  List<User> users = List<User>.from([User(uuid: "1", name: "Brandon Faunce", color: Colors.red), User(uuid: "1", name: "Raynard Miot", color: Colors.purple), User(uuid: "1", name: "Danil Donchuk", color: Colors.orange), User(uuid: "1", name: "Jan Li", color: Colors.green)]);
-  List<Transaction> transactions = [
-    Transaction(date: "1/11/24", from: "Dan Donchuk", amount: 50),
-    Transaction(date: "1/11/24", from: "Dan Donchuk", amount: -50),
-    Transaction(date: "1/11/24", from: "Dan Donchuk", amount: -50)
-  ];
-
-  User myUser = User(uuid: "1", name: "Brandon Faunce", color: Colors.red);
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +46,68 @@ class AppState extends State<MyApp> {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
+                                          onPrimary: Color(0xFF4CC9F0),
+                                          onSecondary: Color(0xFFF96368),
+        ),
         useMaterial3: true,
       ),
-      home: HomePage(title: 'HomePage', myUser: myUser, users: users, transactions: transactions),
+      home: NavPageWrapper(),
+    );
+  }
+}
+
+class NavPageWrapper extends StatefulWidget {
+  const NavPageWrapper({super.key});
+
+  @override
+  State<NavPageWrapper> createState() => _NavPageWrapperState();
+}
+
+class _NavPageWrapperState extends State<NavPageWrapper> {
+
+  bool needsUpdate = false;
+
+  final pages = [
+    HomePage(),
+    PicturePage(),
+    GroupPage(),
+    LedgerPage(),
+    ProfilePage()
+  ];
+
+  int pageIndex = 0;
+
+  void selectPage(int index) {
+    pageIndex = index;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    doInitState().then((_) {setState(() {});});
+    
+    // .then(() => 
+    // api.getYourReceipts().then(() =>
+    // setState(() {});
+    // ))
+    
+  }
+
+  Future<void> doInitState() async {
+    await api.getYourAccount();
+    await api.getYourReceipts();
+    await api.getAllUsers();
+    print(info.myReceipts);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: NavBar(selectFunc: selectPage),
+      body: pages[pageIndex]
     );
   }
 }
