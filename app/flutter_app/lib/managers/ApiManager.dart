@@ -68,5 +68,16 @@ class APIManager {
     }
     return;
   }
+
+  Future<void> processReceipt() async {
+    var request = new http.MultipartRequest("POST", Uri.http(url, "process"));
+    request.files.add(await http.MultipartFile.fromPath(
+        'file',
+        'build/brand_receipt8.jpg'
+    ));
+    request.send().then((response) {
+      print(response);
+    });
+  }
 }
 

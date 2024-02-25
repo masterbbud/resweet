@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_app/managers/InfoManager.dart';
+import 'package:flutter_app/screens/PicturePage.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key, required this.selectFunc});
@@ -33,7 +34,12 @@ class NavBar extends StatelessWidget {
                     child: IconButton(
                       tooltip: 'Upload',
                       icon: const Icon(Icons.file_upload),
-                      onPressed: () {selectFunc(1);},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PicturePage()),
+                        );
+                      },
                       iconSize: 37.74,
                       padding: const EdgeInsets.only(bottom: 0),
                     ),
