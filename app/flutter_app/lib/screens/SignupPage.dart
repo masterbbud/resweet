@@ -19,19 +19,16 @@ class SignupState extends State<Signup> {
   void submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final token = api.signup(
+      api.signup(
           usernameController.text,
           displayController.text,
           passwordController.text
-      );
-      if (token != null) {
-        widget.setToken(token);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage())
-        );
-      }
-      // Navigator.pushNamed(context, '/home');
+      ).then((token) {
+        if (token != null) {
+          widget.setToken(token);
+          Navigator.pop(context);
+        }
+      });
     }
   }
 

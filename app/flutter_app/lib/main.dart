@@ -30,6 +30,7 @@ class AppState extends State<MyApp> {
     super.initState();
     info.setYourToken(storage.getItem('token'));
   }
+
   ThemeMode _themeMode = ThemeMode.light;
   @override
   AppState createState() => AppState();
@@ -64,10 +65,16 @@ class AppState extends State<MyApp> {
         useMaterial3: true,
       ),
       themeMode: _themeMode,
-      home: info.amINull() ? Landing(setToken: (token) {
+      home: info.myToken == null ? Landing(setToken: (token) {
         storage.setItem('token', token);
         info.setYourToken(token);
-        setState(() {});
+        api.getYourAccount().then((_) {
+          api.getYourReceipts().then((_) {
+            api.getAllUsers().then((_) {
+              setState(() {});
+            });
+          });
+        });
       },) : NavPageWrapper(),
     );
   }
@@ -131,6 +138,4 @@ class _NavPageWrapperState extends State<NavPageWrapper> {
 
     );
   }
-
-
 }

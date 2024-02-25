@@ -23,7 +23,7 @@ class InfoManager {
     allUsers = users;
   }
 
-  void setYourToken(String token) {
+  void setYourToken(String? token) {
     myToken = token;
   }
 
