@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_app/managers/InfoManager.dart';
 
 class NavBar extends StatelessWidget {
-  const NavBar({super.key});
+  const NavBar({super.key, required this.selectFunc});
+
+  final Function(int) selectFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class NavBar extends StatelessWidget {
         width: 75,
         child: FittedBox (
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {selectFunc(1);},
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           shape: CircleBorder(),
 
@@ -36,33 +40,28 @@ class NavBar extends StatelessWidget {
                   IconButton(
                     tooltip: 'Home',
                     icon: const Icon(Icons.home_outlined),
-                    onPressed: () {},
+                    onPressed: () {selectFunc(0);},
                     iconSize: 37.74,
                     color: Colors.white,
                   ),
                   const Spacer(),
                   IconButton(
-                    tooltip: 'Group',
-                    icon: const Icon(Icons.group_outlined),
-                    onPressed: () {},
-                    iconSize: 37.74,
-                    color: Colors.white,
-                  ),
-                  const Spacer(),
-                  const Spacer(),
-                  const Spacer(),
+                      tooltip: 'Group',
+                      icon: const Icon(Icons.group_outlined),
+                      onPressed: () {selectFunc(2);},
+                      iconSize: 37.74,
+                      color: Colors.white,),
                   IconButton(
-                    tooltip: 'Ledger',
-                    icon: const Icon(Icons.folder_outlined),
-                    onPressed: () {},
-                    iconSize: 37.74,
-                    color: Colors.white,
-                  ),
+                      tooltip: 'Ledger',
+                      icon: const Icon(Icons.folder_outlined),
+                      onPressed: () {selectFunc(3);},
+                      iconSize: 37.74,
+                      color: Colors.white,),
                   const Spacer(),
                   IconButton(
                     tooltip: 'Account',
                     icon: const Icon(Icons.account_circle_outlined),
-                    onPressed: () {},
+                    onPressed: () {selectFunc(4);},
                     iconSize: 37.74,
                     color: Colors.white,
                   ),

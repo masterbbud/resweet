@@ -16,7 +16,7 @@ class Receipt {
         'name': String name,
         'date': String date,
         'assignee': Map<String, dynamic> assignee,
-        'items': List<Map<String, dynamic>> items
+        'items': List<dynamic> items
       } =>
         Receipt(
           name: name,
@@ -33,20 +33,23 @@ class User {
   final String uuid;
   final String name;
   final Color color;
+  final String username;
 
-  User({required this.uuid, required this.name, required this.color});
+  User({required this.uuid, required this.name, required this.color, required this.username});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
         'uuid': String uuid,
         'name': String name,
-        'groupIndex': int groupIndex // TODO FIX
+        'groupIndex': int groupIndex, // TODO FIX
+        'username': String username,
       } =>
         User(
           uuid: uuid,
           name: name,
-          color: getColor(groupIndex)
+          color: getColor(groupIndex),
+          username: username
         ),
       _ => throw const FormatException('Failed to load user.'),
     };
@@ -69,7 +72,7 @@ class RItem {
       {
         'name': String name,
         'price': double price,
-        'payers': List<Map<String, dynamic>> payers
+        'payers': List<dynamic> payers
       } =>
         RItem(
           name: name,
@@ -91,7 +94,7 @@ class Group {
     return switch (json) {
       {
         'name': String name,
-        'members': List<Map<String, dynamic>> members
+        'members': List<dynamic> members
       } =>
         Group(
           name: name,
