@@ -6,7 +6,7 @@ from google.cloud.sql.connector import Connector, IPTypes
 import pg8000
 import sqlalchemy
 import json
-from api import users, groups, auth, receipts, receipt_ocr
+from api import users, groups, auth, receipts, receipt_ocr, ledger
 import db.groups
 from db.models import *
 
@@ -15,7 +15,8 @@ app.include_router(users.app)
 app.include_router(groups.app)
 app.include_router(auth.app)
 app.include_router(receipts.app)
-app.include_router(receipt_ocr.app)
+app.include_router(receipt_ocr.router)
+app.include_router(ledger.app)
 
 
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:

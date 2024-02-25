@@ -27,3 +27,7 @@ class Receipt(BaseModel):
 class Credentials(BaseModel):
     username: str
     password: str
+
+class LedgerEntry(BaseModel):
+    user: User
+    balance: float

@@ -4,7 +4,6 @@ from hashlib import sha256
 from datetime import datetime
 import uuid
 import server
-# from ..server import Session
 
 Base = declarative_base()
 
@@ -22,6 +21,15 @@ class User(Base):
         self.display_name = display_name
         self.pass_hash = sha256(password.encode("utf-8")).hexdigest()
         super().__init__()
+
+
+class LedgerEntry():
+    user_id : uuid.UUID
+    balance : float
+
+    def __init__(self, user_id: str, balance: float):
+        self.user_id = uuid.UUID(user_id)
+        self.balance = balance
 
 
 class Group(Base):
@@ -48,6 +56,97 @@ class Group(Base):
             users = [user for (user,) in users]
             s.commit()
             return users
+        
+    def get_ledger(self) -> list[LedgerEntry]:
+        with server.Session() as s:
+            query = text("""DROP VIEW totals""")
+            s.execute(query)
+            s.commit()
+
+            query = text("""
+                CREATE VIEW totals AS
+                SELECT
+                    receipts_items.receipt_id AS receipt_id,
+                    SUM(items.price) AS total
+                FROM receipts_items
+                INNER JOIN items
+                ON receipts_items.item_id = items.id
+                GROUP BY receipts_items.receipt_id
+            """)
+            s.execute(query)
+            s.commit()
+
+            # i will not be able to tell you how this works after i've gone to sleep...it does work though :)
+            # dan, 2/25/2024 3:13 am
+            query = text("""
+                SELECT
+                    users_groups.user_id,
+                    COALESCE(amount_spent, 0) + COALESCE(paid, 0) AS balance
+                FROM (
+                    SELECT
+                    DISTINCT ON (user_amounts_spent.user_id)
+                        user_amounts_spent.user_id,
+                        CASE
+                            WHEN(user_amounts_spent.amount_spent IS NULL) THEN 0
+                            ELSE ROUND(user_amounts_spent.amount_spent, 2)
+                        END AS amount_spent,
+                        CASE
+                            WHEN(receipts.user_paid_id = user_amounts_spent.user_id) THEN totals.total
+                            ELSE 0
+                        END AS paid
+                    FROM (
+                        SELECT
+                            users.id AS user_id,
+                            SUM(-user_paid_counts.item_price / user_paid_counts.user_count) AS amount_spent
+                        FROM (
+                            SELECT
+                                items.id AS item_id,
+                                items.name AS item_name,
+                                items.price AS item_price,
+                                COUNT(items_users.user_paid_id) AS user_count
+                            FROM items
+                            INNER JOIN items_users
+                            ON items_users.item_id = items.id
+                            INNER JOIN users_groups
+                            ON items_users.user_paid_id = users_groups.user_id
+                            WHERE users_groups.group_id = :id
+                            GROUP BY items.id
+                        ) AS user_paid_counts
+
+                        INNER JOIN items_users
+                        ON user_paid_counts.item_id = items_users.item_id
+                        RIGHT JOIN users
+                        ON items_users.user_paid_id = users.id
+                        INNER JOIN users_groups
+                        ON users_groups.user_id = users.id
+                        WHERE users_groups.group_id = :id
+                        GROUP BY users.id, users.display_name
+                    ) AS user_amounts_spent
+
+                    RIGHT JOIN items_users
+                    ON user_id = items_users.user_paid_id
+                    INNER JOIN users_groups
+                    ON users_groups.user_id = items_users.user_paid_id
+                    INNER JOIN receipts_items
+                    ON items_users.item_id = receipts_items.item_id
+                    INNER JOIN receipts
+                    ON receipts_items.receipt_id = receipts.id
+                    INNER JOIN totals
+                    ON receipts.id = totals.receipt_id
+                    WHERE users_groups.group_id = :id
+                    ORDER BY user_amounts_spent.user_id ASC, paid DESC
+                ) AS amounts_spent_with_paid
+                RIGHT JOIN users_groups
+                ON users_groups.user_id = amounts_spent_with_paid.user_id
+                WHERE users_groups.group_id = :id
+                ORDER BY users_groups.group_id ASC;
+            """)
+
+            entries = s.execute(query, {"id": self.id}).all()
+            entries = [LedgerEntry(str(id), balance) for (id, balance) in entries]
+            s.commit()
+            print(entries)
+            return entries
 
 
 class ReceiptItem(Base):

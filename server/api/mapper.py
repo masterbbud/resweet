@@ -25,3 +25,7 @@ def to_api_receipt(db_receipt: db.Receipt) -> api.Receipt:
         assignee=assignee,
         items=items
         )
+
+def to_api_ledger_entry(db_entry: db.LedgerEntry) -> api.LedgerEntry:
+    user = to_api_user(users.get_by_uuid(db_entry.user_id))
+    return api.LedgerEntry(user=user, balance=db_entry.balance)
