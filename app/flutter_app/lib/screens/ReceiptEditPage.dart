@@ -27,14 +27,15 @@ class ReceiptEditPageState extends State<ReceiptEditPage> {
               child: Column(
                   children: [
                     Text("Edit Receipt"),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: widget.receipt.items.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ReceiptItem(receipt: widget.receipt.items[index]);
-                        },
-                      ),
-                    Spacer(),
+                    Expanded(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.receipt.items.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ReceiptItem(receipt: widget.receipt.items[index]);
+                          },
+                        ),
+                    ),
                     Column(
                       children: [
                         Row(children: [
