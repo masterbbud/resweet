@@ -27,6 +27,22 @@ class Receipt {
       _ => throw const FormatException('Failed to load receipt.'),
     };
   }
+
+  double getTotal() {
+    double total = 0;
+    items.forEach((i) => total += i.price);
+    return total;
+  }
+
+  double getPriceForUser(User user) {
+    double total = 0;
+    items.forEach((i) {
+      if (i.payers.any((u) => u.uuid == user.uuid)) {
+        total += i.price / i.payers.length;
+      }
+    });
+    return total;
+  }
 }
 
 class User {

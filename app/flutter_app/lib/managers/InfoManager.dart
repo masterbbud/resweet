@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
 
-final User nullUser = User(name: '', color: Colors.white, uuid: '', username: '');
+final User nullUser = User(name: 'User1234567890', color: Colors.amber, uuid: '', username: 'User');
 
 class InfoManager {
 

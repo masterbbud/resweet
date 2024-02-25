@@ -85,5 +85,16 @@ class APIManager {
     var response = await request.send();
     return Receipt(name: "", date: "", assignee: info.myUser, items: [RItem(name: "Item Name", price: 1.00, payers: [])]);
   }
+
+  Future<Receipt> finalizeReceipt(Receipt receipt) async {
+    receipt.items.forEach((item) {
+      if (item.payers.length == 0) {
+        item.payers.add(receipt.assignee);
+      }
+    });
+    var request = new http.MultipartRequest("POST", Uri.http(url, "finalize"));
+    var response = await request.send();
+    return receipt;
+  }
 }
 
