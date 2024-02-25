@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/managers/EverythingManager.dart';
 import 'package:flutter_app/screens/GroupPage.dart';
 import 'package:flutter_app/screens/HomePage.dart';
+import 'package:flutter_app/screens/LandingPage.dart';
 import 'package:flutter_app/screens/LedgerPage.dart';
 import 'package:flutter_app/screens/NavBar.dart';
 import 'package:flutter_app/screens/ProfilePage.dart';
+import 'package:localstorage/localstorage.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,6 +23,13 @@ class MyApp extends StatefulWidget {
 }
 
 class AppState extends State<MyApp> {
+  final storage = LocalStorage('token');
+
+  @override
+  void initState() {
+    super.initState();
+    info.setYourToken(storage.getItem('token'));
+  }
   ThemeMode _themeMode = ThemeMode.light;
   @override
   AppState createState() => AppState();
@@ -54,8 +63,12 @@ class AppState extends State<MyApp> {
         ),
         useMaterial3: true,
       ),
-      home: NavPageWrapper(),
-      themeMode: _themeMode
+      themeMode: _themeMode,
+      home: info.amINull() ? Landing(setToken: (token) {
+        storage.setItem('token', token);
+        info.setYourToken(token);
+        setState(() {});
+      },) : NavPageWrapper(),
     );
   }
 
@@ -90,23 +103,8 @@ class _NavPageWrapperState extends State<NavPageWrapper> {
   @override
   void initState() {
     super.initState();
-    // doInitState().then((_) {setState(() {});});
-    
-    // .then(() => 
-    // api.getYourReceipts().then(() =>
-    // setState(() {});
-    // ))
-
-    initApp();
+    // initApp();
   }
-
-  // Future<void> doInitState() async {
-  //   await api.getYourAccount();
-  //   await api.getYourReceipts();
-  //   await api.getAllUsers();
-  //   print(info.myReceipts);
-  //   setState(() {});
-  // }
 
   Future<void> initApp() async {
     try {

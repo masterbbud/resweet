@@ -7,11 +7,9 @@ final User nullUser = User(name: 'User1234567890', color: Colors.amber, uuid: ''
 class InfoManager {
 
   List<Receipt> myReceipts = List<Receipt>.empty();
-
+  String? myToken = null;
   User myUser = nullUser;
   List<User> allUsers = [];
-
-  String myToken = "";
 
   void setYourReceipts(List<Receipt> receipts) {
     myReceipts = receipts;
@@ -28,4 +26,16 @@ class InfoManager {
   void setYourToken(String token) {
     myToken = token;
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! InfoManager) return false;
+    final InfoManager otherInfoManager = other;
+    return myReceipts == otherInfoManager.myReceipts &&
+        myUser == otherInfoManager.myUser &&
+        allUsers == otherInfoManager.allUsers;
+  }
+
+  bool amINull() => myUser == nullUser;
 }
