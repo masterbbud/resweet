@@ -42,6 +42,9 @@ class ReceiptItem(Base):
         self.name = name
         self.price = price
         super().__init__()
+
+    def users_paid(self) -> list[User]:
+        pass
         
 
 class Receipt(Base):
