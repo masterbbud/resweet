@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
@@ -113,6 +114,19 @@ class APIManager {
     await getAllUsers();
     await getYourReceipts();
     return;
+  }
+
+  Future<List<dynamic>> getLedger() async {
+    final response = await http
+      .get(Uri.http(url, "api/ledger"), headers: {'token': info.myToken});
+    
+    List<dynamic> entries = (jsonDecode(response.body) as List<dynamic>);
+    entries = [{'user': {'name': "Test", 'uuid': 'Test111', 'groupIndex': 10, 'username': 'test username'}, 'balance': 100}];
+    List<Map<String, dynamic>> res = [];
+    for (dynamic d in entries) {
+      res.add({'user': User.fromJson(d['user']), 'balance': d['balance']});
+    }
+    return res;
   }
 }
 

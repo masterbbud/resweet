@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/interfaces.dart';
 import 'package:flutter_app/screens/PhotoCarousel.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   User myUser = nullUser;
   List<User> users = List<User>.empty();
+  List<dynamic> ledger = [];
   List<Transaction> transactions = List<Transaction>.empty();
 
   @override
@@ -45,6 +47,7 @@ class HomePageState extends State<HomePage> {
       }
     }
     transactions = transactions;
+    api.getLedger().then((result) => ledger = result);
   }
 
   @override
@@ -63,6 +66,20 @@ class HomePageState extends State<HomePage> {
                       color: Theme.of(context).colorScheme.onPrimary,
                       fontFamily: 'BagelFatOne'))),
           PhotoCarousel(),
+          Expanded(
+            child: Padding(padding: const EdgeInsets.all(16.0) 
+            , child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: ledger.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column( children: [
+                    UserGroupIcon(user: ledger[index]['user']),
+                    Text(ledger[index]['balance'])
+                  ]
+                  );
+                },
+            ))
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
