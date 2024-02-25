@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
+from db.users import *
 from db.groups import *
 from db.auth import *
 from .mapper import *
@@ -21,3 +22,12 @@ async def get(req: Request):
 
     if user is None: raise HTTPException(401, "Authentication failed")
     return to_api_group(get_user_group(user.id))
+
+@app.put("")
+async def add_user(req: Request, body: api.GroupPut):
+    user = authenticate(req.headers["token"])
+
+    if user is None: raise HTTPException(401, "Authentication failed")
+    group = get_user_group(user.id)
+    group.add_member(get_user_by_username(body.username))
+    return to_api_group(group)

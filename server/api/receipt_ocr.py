@@ -70,6 +70,8 @@ def get_receipt_info_from_token(token: str):
     return token_to_ocr_result(token)
 
 
+saved_rect = None
+
 @router.post('/process')
 async def process_receipt(file: UploadFile):
     """
@@ -81,6 +83,9 @@ async def process_receipt(file: UploadFile):
     Returns:
         dict: The token for the OCR result
     """
+    global saved_rect
+    if (saved_rect):
+        return saved_rect
     token = image_to_token(file)
 
     # Since the OCR takes a bit to process the receipt
@@ -90,6 +95,7 @@ async def process_receipt(file: UploadFile):
     while True:
         res = token_to_ocr_result(token)
         if res['status'] != 'pending':
+            saved_rect = res['result']
             return res['result']
         print('Waiting for OCR result...')
         time.sleep(WAIT)

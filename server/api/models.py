@@ -56,3 +56,8 @@ class GroupPost(BaseModel):
 
 class InvitePost(BaseModel):
     group_id: str
+
+
+# classes that represent PUT request bodies
+class GroupPut(BaseModel):
+    username: str

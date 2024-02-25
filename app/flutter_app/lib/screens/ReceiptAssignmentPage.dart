@@ -43,21 +43,24 @@ class ReceiptAssignmentPageState extends State<ReceiptAssignmentPage> {
                       child: Column(
                         children: [
                           Text("Assign Items"),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: widget.receipt.items.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    child: ReceiptItem(receipt: widget.receipt.items[index], selectedUser: selectedUser)),
-                                );
-                              },
-                            ),
-                          Spacer(),
+                          Expanded(
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: widget.receipt.items.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: ReceiptItem(receipt: widget.receipt.items[index], selectedUser: selectedUser)),
+                                  );
+                                },
+                              ),
+                          ),
                           Column(
                             children: [
-                              TextButton(
+                              SizedBox(
+                                height: 40,
+                                  child: TextButton(
                                 onPressed: () {
                                   // TODO give everything with blank payers to the assignee
                                   api.finalizeReceipt(widget.receipt).then((receipt) {
@@ -74,8 +77,24 @@ class ReceiptAssignmentPageState extends State<ReceiptAssignmentPage> {
                                   });
                                   
                                 },
-                                child: Text("Confirm")
-                              ),
+                                child: Text("Confirm",
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: 24,
+                                        color: Theme.of(context).colorScheme.background)),
+                                style: ButtonStyle(
+                                    padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.fromLTRB(15, 10, 15, 10)),
+                                    backgroundColor: MaterialStateProperty.all<Color>(
+                                        Theme.of(context).colorScheme.onPrimary),
+                                    shape:
+                                    MaterialStateProperty.all<RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary)))),
+                              )),
                           ],)
                         ],
                       ),
@@ -165,7 +184,7 @@ class ReceiptItemState extends State<ReceiptItem> {
                     alignment: Alignment.centerRight,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                      child: Text('\$${widget.receipt.price}'),
+                      child: Text('\$'+widget.receipt.price.toStringAsFixed(2)),
                     ))
                 ),
             ],

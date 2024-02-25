@@ -48,6 +48,7 @@ class NavBar extends StatelessWidget {
                     );
 
                     api.processReceipt(image).then((rcpt) {
+                      print(rcpt);
                       // Close the loading modal
                       Navigator.pop(context);
 
@@ -83,7 +84,7 @@ class NavBar extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.onSecondary,
                 shape: CircleBorder(),
 
-                child: Icon(Icons.upload, size: 37.74,color: Colors.white,),
+                child: Icon(Icons.upload, size: 37.74,color: Theme.of(context).colorScheme.background,),
               )),
 
         ),
@@ -101,7 +102,7 @@ class NavBar extends StatelessWidget {
                 icon: const Icon(Icons.home_outlined),
                 onPressed: () {selectFunc(0);},
                 iconSize: 37.74,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.background,
               ),
               const Spacer(),
               IconButton(
@@ -109,7 +110,7 @@ class NavBar extends StatelessWidget {
                 icon: const Icon(Icons.group_outlined),
                 onPressed: () {selectFunc(1);},
                 iconSize: 37.74,
-                color: Colors.white,),
+                color: Theme.of(context).colorScheme.background,),
               const Spacer(),
               const Spacer(),
               const Spacer(),
@@ -118,14 +119,14 @@ class NavBar extends StatelessWidget {
                 icon: const Icon(Icons.folder_outlined),
                 onPressed: () {selectFunc(2);},
                 iconSize: 37.74,
-                color: Colors.white,),
+                color: Theme.of(context).colorScheme.background,),
               const Spacer(),
               IconButton(
                 tooltip: 'Account',
                 icon: const Icon(Icons.account_circle_outlined),
                 onPressed: () {selectFunc(3);},
                 iconSize: 37.74,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.background,
               ),
               const Spacer(),
             ],

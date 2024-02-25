@@ -12,6 +12,8 @@ app = APIRouter(prefix="/api/receipt")
 
 @app.post("")
 async def create(req: api.ReceiptPost):
+    print(req.name)
+    print(len(req.items))
     items = [add_item(db.ReceiptItem(item.name, item.price)) for item in req.items]
 
     for i in range(len(items)):
@@ -28,4 +30,3 @@ async def get(req: Request):
     if user is None: raise HTTPException(401, "Authentication failed")
     user_group_id = get_user_group(user.id).id
     return [to_api_receipt(receipt) for receipt in get_all_in_group(user_group_id)]
- 

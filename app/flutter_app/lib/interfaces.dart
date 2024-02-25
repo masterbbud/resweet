@@ -1,5 +1,7 @@
 
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Receipt {
@@ -43,6 +45,9 @@ class Receipt {
     });
     return total;
   }
+
+  static Map<String, dynamic> toJson(Receipt value) =>
+      {'name': value.name, 'date_entered': value.date, 'assignee_id': value.assignee.uuid, 'items': value.items.map((p) => RItem.toJson(p)).toList()};
 }
 
 class User {
@@ -58,13 +63,12 @@ class User {
       {
         'uuid': String uuid,
         'name': String name,
-        'groupIndex': int groupIndex, // TODO FIX
         'username': String username,
       } =>
         User(
           uuid: uuid,
           name: name,
-          color: getColor(groupIndex),
+          color: getColor(1),
           username: username
         ),
       _ => throw const FormatException('Failed to load user.'),
@@ -98,6 +102,9 @@ class RItem {
       _ => throw const FormatException('Failed to load RItem.'),
     };
   }
+
+  static Map<String, dynamic> toJson(RItem value) =>
+      {'name': value.name, 'price': value.price, 'payer_ids': value.payers.map((p) => p.uuid).toList()};
 }
 
 class Group {
@@ -172,6 +179,7 @@ class ReceiptSnapshot {
 
   bool isNone() =>
       subTotal == 0 && total == 0 && items.isEmpty;
+
 }
 
 class RSItem {
@@ -187,4 +195,8 @@ class RSItem {
 
   factory RSItem.fromMap(Map<String, dynamic> json) =>
       RSItem(qty: json['qty'], desc: json['descClean'], price: double.parse(json['lineTotal']));
+  
+  RItem toRItem(double scale) {
+    return RItem(name: desc, price: price * scale, payers: []);
+  }
 }

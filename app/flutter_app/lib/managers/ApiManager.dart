@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
@@ -16,11 +17,14 @@ class APIManager {
 
   final InfoManager info;
 
-  final String url = "resweet-zr7u3u4ibq-uc.a.run.app";
+  //final String url = "resweet-zr7u3u4ibq-uc.a.run.app";
+  final String url = "127.0.0.1:8000";
 
   Future<void> getYourReceipts() async {
     final response = await http
-      .get(Uri.http(url, "receipts", {'user': 'myUser'}));
+      .get(Uri.http(url, "api/receipt"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
     final receiptsJson = (body['receipts'] as List<dynamic>);
@@ -39,7 +43,9 @@ class APIManager {
 
   Future<void> getYourAccount() async {
     final response = await http
-      .get(Uri.http(url, "login", {'user': 'myUser'}));
+      .get(Uri.http(url, "api/user"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
 
@@ -57,10 +63,12 @@ class APIManager {
 
   Future<void> getAllUsers() async {
     final response = await http
-      .get(Uri.http(url, "group", {'user': 'myUser'}));
+      .get(Uri.http(url, "group"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
 
     final body = (jsonDecode(response.body) as Map<String, dynamic>);
-    final usersJson = (body['users'] as List<dynamic>);
+    final usersJson = (body['members'] as List<dynamic>);
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -74,13 +82,57 @@ class APIManager {
     return;
   }
 
+  Future<String?> signup(String username, String display, String password) async {
+    final uri = Uri.http(url, "api/user");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      'username': username,
+      'display_name': display,
+      'password': password
+    });
+    final res = await http.post(uri, headers: headers, body: body);
+
+    if (res.statusCode != 200) {
+      return null;
+    }
+
+    return await login(username, password);
+  }
+
+  Future<String?> login(String username, String password) async {
+    final uri = Uri.http(url, "api/auth");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      'username': username,
+      'password': password
+    });
+    final res = await http.post(uri, headers: headers, body: body);
+
+    if (res.statusCode != 200) {
+      return null;
+    }
+
+    return jsonDecode(res.body);
+  }
+
   Future<ReceiptSnapshot> processReceipt(XFile f) async => p.processReceipt(f);
 
 
-  Future<Receipt> confirmReceipt(ReceiptSnapshot receipt) async {
-    var request = new http.MultipartRequest("POST", Uri.http(url, "confirm"));
-    var response = await request.send();
-    return Receipt(name: "", date: "", assignee: info.myUser, items: [RItem(name: "Item Name", price: 1.00, payers: [])]);
+  Future<Receipt> confirmReceipt(ReceiptSnapshot receipt, bool doScale, String name, User assignee) async {
+    DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+    double taxMod;
+    if (doScale) {
+      double total = 0.0;
+      for (RSItem rsi in receipt.items) {
+        total += rsi.price;
+      }
+      taxMod = receipt.total / total;
+    }
+    else {
+      taxMod = 1.0;
+    }
+    return Receipt(name: name, date: "${now.year}-${now.month}-${now.day}", assignee: assignee, items: receipt.items.map((i) => i.toRItem(taxMod)).toList());
   }
 
   Future<Receipt> finalizeReceipt(Receipt receipt) async {
@@ -89,9 +141,34 @@ class APIManager {
         item.payers.add(receipt.assignee);
       }
     });
-    var request = new http.MultipartRequest("POST", Uri.http(url, "finalize"));
-    var response = await request.send();
+    print(jsonEncode(Receipt.toJson(receipt)));
+    var request = await http.post(Uri.http(url, "api/receipt"), body: jsonEncode(Receipt.toJson(receipt)), headers: {"Content-Type": "application/json"});
+    await getYourReceipts();
     return receipt;
+  }
+
+  Future<void> joinWithCode(String code) async {
+    final response = await http
+      .get(Uri.http(url, "invite/$code"), headers: {'token': info.myToken ?? ''});
+
+    if (response.statusCode != 200) return;
+
+    await getAllUsers();
+    await getYourReceipts();
+    return;
+  }
+
+  Future<List<dynamic>> getLedger() async {
+    final response = await http
+      .get(Uri.http(url, "api/ledger"), headers: {'token': info.myToken});
+    
+    List<dynamic> entries = (jsonDecode(response.body) as List<dynamic>);
+    entries = [{'user': {'name': "Test", 'uuid': 'Test111', 'groupIndex': 10, 'username': 'test username'}, 'balance': 100}];
+    List<Map<String, dynamic>> res = [];
+    for (dynamic d in entries) {
+      res.add({'user': User.fromJson(d['user']), 'balance': d['balance']});
+    }
+    return res;
   }
 }
 
