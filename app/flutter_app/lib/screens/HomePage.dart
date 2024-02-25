@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
+import 'package:flutter_app/screens/PhotoCarousel.dart';
 import 'package:flutter_app/screens/NavBar.dart';
 
 class HomePage extends StatelessWidget {
@@ -28,6 +29,7 @@ class HomePage extends StatelessWidget {
                     )
                 )
             ),
+            PhotoCarousel(),
             Expanded(
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
