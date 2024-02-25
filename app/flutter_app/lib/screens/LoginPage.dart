@@ -13,13 +13,21 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
-  String username = '';
-  String password = '';
+  TextEditingController usernameController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
 
   void submit() {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      // Navigator.pushNamed(context, '/home');
+      api.login(
+          usernameController.text,
+          passwordController.text
+      ).then((token) {
+        if (token != null) {
+          widget.setToken(token);
+          Navigator.pop(context);
+        }
+      });
     }
   }
 
@@ -29,42 +37,45 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('Welcome to the Resweet'),
-            TextFormField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Username',
+      body: Form(
+        key: formKey,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('Welcome to the Resweet'),
+              TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Username',
+                ),
+                controller: usernameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your username';
+                  }
+                  return null;
+                },
               ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                ),
+                controller: passwordController,
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your username';
-                }
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
                 return null;
-              },
-              onSaved: (value) => username = value ?? '',
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
+                },
               ),
-            validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
-                }
-              return null;
-              },
-              onSaved: (value) => password = value ?? '',
-            ),
-            RaisedButton(
-              onPressed: submit,
-              child: const Text('Login'),
-            ),
-          ],
+              RaisedButton(
+                onPressed: submit,
+                child: const Text('Login'),
+              ),
+            ],
+          ),
         ),
       ),
     );

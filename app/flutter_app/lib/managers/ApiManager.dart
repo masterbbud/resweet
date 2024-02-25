@@ -160,7 +160,7 @@ class APIManager {
 
   Future<List<dynamic>> getLedger() async {
     final response = await http
-      .get(Uri.http(url, "api/ledger"), headers: {'token': info.myToken});
+      .get(Uri.http(url, "api/ledger"), headers: {'token': info.myToken ?? ''});
     
     List<dynamic> entries = (jsonDecode(response.body) as List<dynamic>);
     entries = [{'user': {'name': "Test", 'uuid': 'Test111', 'groupIndex': 10, 'username': 'test username'}, 'balance': 100}];
