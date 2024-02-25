@@ -11,7 +11,11 @@ import db.groups
 from db.models import *
 
 app = FastAPI()
-
+app.include_router(users.app)
+app.include_router(groups.app)
+app.include_router(auth.app)
+app.include_router(receipts.app)
+app.include_router(receipt_ocr.app)
 
 
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:
