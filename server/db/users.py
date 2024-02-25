@@ -24,3 +24,14 @@ def get_by_uuid(id: str) -> User:
         user = s.execute(query, {"id": id}).one_or_none()
         s.commit()
         return None if user == None else user[0]
+    
+def get_by_username(username: str) -> User:
+    with server.Session() as s:
+        query = s.query(User).from_statement(text("""
+            SELECT * FROM users
+            WHERE username = :username
+        """))
+
+        user = s.execute(query, {"username": username}).one_or_none()
+        s.commit()
+        return None if user == None else user[0]
