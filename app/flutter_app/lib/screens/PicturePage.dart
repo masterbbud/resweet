@@ -36,6 +36,7 @@ class PicturePageState extends State<PicturePage> {
                 child: IconButton(iconSize: 70.0, color: Colors.white, icon: Icon(Icons.circle_outlined), onPressed: () {
                   loading = true;
                   api.processReceipt().then((receipt) {
+                    print(receipt);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ReceiptEditPage(receipt: receipt)),
