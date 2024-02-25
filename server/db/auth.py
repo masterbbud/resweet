@@ -38,3 +38,14 @@ def authenticate(token: str) -> User:
         user = s.execute(query, {"token": token}).one_or_none()
         s.commit()
         return None if user == None else user[0]
+    
+def log_out(token: str):
+    with server.Session() as s:
+        query = text("""
+            UPDATE users
+            SET token = null
+            WHERE token = :token
+        """)
+
+        s.execute(query, {"token": token})
+        s.commit()

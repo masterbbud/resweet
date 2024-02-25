@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from db.auth import *
 from .models import *
 from .mapper import *
@@ -11,3 +11,11 @@ async def login(credentials: Credentials) -> str:
     
     if token is None: raise HTTPException(401, "Login failed")
     return token
+
+@app.delete("")
+async def logout(req: Request) -> str:
+    token = authenticate(req.headers["token"]).token
+
+    if token is None: raise HTTPException(401, "Authentication failed")
+    log_out(token)
+    return "Logged out"
