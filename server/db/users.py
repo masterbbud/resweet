@@ -3,7 +3,7 @@ from sqlalchemy.sql.expression import text
 
 from .models import User
 
-def add(user: User) -> User:
+def add_user(user: User) -> User:
     with server.Session() as s:
         query = text("""
             INSERT INTO users (username, display_name, pass_hash)
@@ -14,7 +14,7 @@ def add(user: User) -> User:
         s.commit()
         return user
     
-def get_by_uuid(id: str) -> User:
+def get_user_by_uuid(id: str) -> User:
     with server.Session() as s:
         query = s.query(User).from_statement(text("""
             SELECT * FROM users
@@ -25,7 +25,7 @@ def get_by_uuid(id: str) -> User:
         s.commit()
         return None if user == None else user[0]
     
-def get_by_username(username: str) -> User:
+def get_user_by_username(username: str) -> User:
     with server.Session() as s:
         query = s.query(User).from_statement(text("""
             SELECT * FROM users

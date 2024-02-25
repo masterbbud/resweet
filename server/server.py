@@ -6,7 +6,7 @@ from google.cloud.sql.connector import Connector, IPTypes
 import pg8000
 import sqlalchemy
 import json
-from api import users, groups, auth, receipts, receipt_ocr, ledger
+from api import users, groups, auth, receipts, receipt_ocr, ledger, invite
 import db.groups
 from db.models import *
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,6 +20,7 @@ app.include_router(auth.app)
 app.include_router(receipts.app)
 app.include_router(receipt_ocr.router)
 app.include_router(ledger.app)
+app.include_router(invite.app)
 
 origins = [
     '*'

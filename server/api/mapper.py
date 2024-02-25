@@ -15,7 +15,7 @@ def to_api_receipt_item(db_item: db.ReceiptItem) -> api.ReceiptItem:
     return api.ReceiptItem(id=db_item.id, name=db_item.name, price=db_item.price, payers=payers)
 
 def to_api_receipt(db_receipt: db.Receipt) -> api.Receipt:
-    assignee = to_api_user(users.get_by_uuid(db_receipt.user_paid_id))
+    assignee = to_api_user(users.get_user_by_uuid(db_receipt.user_paid_id))
     items = [to_api_receipt_item(item) for item in db_receipt.get_items()]
 
     return api.Receipt(
@@ -27,5 +27,5 @@ def to_api_receipt(db_receipt: db.Receipt) -> api.Receipt:
         )
 
 def to_api_ledger_entry(db_entry: db.LedgerEntry) -> api.LedgerEntry:
-    user = to_api_user(users.get_by_uuid(db_entry.user_id))
+    user = to_api_user(users.get_user_by_uuid(db_entry.user_id))
     return api.LedgerEntry(user=user, balance=db_entry.balance)
