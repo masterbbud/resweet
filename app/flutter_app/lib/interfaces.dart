@@ -169,6 +169,9 @@ class ReceiptSnapshot {
   String toString() {
     return 'ReceiptSnapshot{subTotal: $subTotal, total: $total, taxes: $taxes, items: $items}';
   }
+
+  bool isNone() =>
+      subTotal == 0 && total == 0 && items.isEmpty;
 }
 
 class RSItem {

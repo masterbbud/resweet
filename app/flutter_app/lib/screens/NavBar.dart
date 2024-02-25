@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/interfaces.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_app/managers/EverythingManager.dart';
-import 'dart:io';
 
 import 'ReceiptEditPage.dart';
 
@@ -25,24 +23,61 @@ class NavBar extends StatelessWidget {
           child: FittedBox (
               child: FloatingActionButton(
               onPressed: () {
-                // pickReceiptFromCamera().then((file) {
-                //   if (file != null) {
-                //     api.processReceipt(file).then((receipt) {
-                //       print(receipt.toString());
-                //       Navigator.push(
-                //         context,
-                //           MaterialPageRoute(builder: (context) => ReceiptEditPage(receipt: receipt)),
-                //         );
-                //       });
-                //     }
-                //   });
-                  pickReceiptFromCamera().then((rcpt) {
-                    if (rcpt != null) {
+                  ImagePicker().pickImage(source: ImageSource.camera).then((image) {
+                    if (image == null) return;
+
+                    // Loading modal
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false, // Prevents the dialog from being dismissed accidentally
+                      builder: (BuildContext context) {
+                        return const Dialog(
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircularProgressIndicator(),
+                                SizedBox(width: 20),
+                                Text("Processing receipt..."),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+
+                    api.processReceipt(image).then((rcpt) {
+                      // Close the loading modal
+                      Navigator.pop(context);
+
+                      // If the image could not be parsed
+                      if (rcpt.isNone()) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Error"),
+                              content: const Text("Image could not be processed! Are you sure it was a receipt?"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text("OK"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Dismiss the dialog
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        return;
+                      }
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ReceiptEditPage(receipt: rcpt)),
                       );
-                    }
+                    });
                   });
                 },
                 backgroundColor: Theme.of(context).colorScheme.onSecondary,
@@ -98,12 +133,5 @@ class NavBar extends StatelessWidget {
         ),
       )
     );
-  }
-
-  Future<ReceiptSnapshot?> pickReceiptFromCamera() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (image == null) return null;
-
-    return await api.processReceipt(image);
   }
 }
