@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_app/managers/InfoManager.dart';
 
 class NavBar extends StatelessWidget {
-  const NavBar({super.key});
+  const NavBar({super.key, required this.selectFunc});
+
+  final Function(int) selectFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class NavBar extends StatelessWidget {
                     child: IconButton(
                       tooltip: 'Upload',
                       icon: const Icon(Icons.file_upload),
-                      onPressed: () {},
+                      onPressed: () {selectFunc(1);},
                       iconSize: 37.74,
                       padding: const EdgeInsets.only(bottom: 0),
                     ),
@@ -41,7 +45,7 @@ class NavBar extends StatelessWidget {
                   IconButton(
                     tooltip: 'Home',
                     icon: const Icon(Icons.home_outlined),
-                    onPressed: () {},
+                    onPressed: () {selectFunc(0);},
                     padding: const EdgeInsets.only(left: 30.0),
                     iconSize: 37.74,
                   ),
@@ -49,20 +53,20 @@ class NavBar extends StatelessWidget {
                   IconButton(
                       tooltip: 'Group',
                       icon: const Icon(Icons.group_outlined),
-                      onPressed: () {},
+                      onPressed: () {selectFunc(2);},
                       iconSize: 37.74,
                       padding: const EdgeInsets.only(right: 70)),
                   IconButton(
                       tooltip: 'Ledger',
                       icon: const Icon(Icons.folder_outlined),
-                      onPressed: () {},
+                      onPressed: () {selectFunc(3);},
                       iconSize: 37.74,
                       padding: const EdgeInsets.only(left: 70)),
                   const Spacer(),
                   IconButton(
                     tooltip: 'Account',
                     icon: const Icon(Icons.account_circle_outlined),
-                    onPressed: () {},
+                    onPressed: () {selectFunc(4);},
                     iconSize: 37.74,
                     padding: const EdgeInsets.only(right: 30.0),
                   ),
