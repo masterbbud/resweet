@@ -20,7 +20,7 @@ class ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    // myUser = info.myUser;
+    myUser = info.myUser;
   }
 
   @override
