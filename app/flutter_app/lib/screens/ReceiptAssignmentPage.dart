@@ -67,9 +67,6 @@ class ReceiptAssignmentPageState extends State<ReceiptAssignmentPage> {
                                     Navigator.pop(
                                       context,
                                     );
-                                    Navigator.pop(
-                                      context,
-                                    );
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => ReceiptConfirmPage(receipt: receipt)),

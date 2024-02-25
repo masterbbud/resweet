@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
-import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter_app/managers/EverythingManager.dart';
-import 'package:flutter_app/screens/NavBar.dart';
-import 'package:flutter_app/screens/ReceiptAssignmentPage.dart';
 
 class ReceiptConfirmPage extends StatelessWidget {
   ReceiptConfirmPage({Key? key, required this.receipt}) : super(key: key);
@@ -11,9 +8,6 @@ class ReceiptConfirmPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final int test = 0;
-
     return Scaffold(
       body: Padding(
           padding: const EdgeInsets.all(80.0),
@@ -44,7 +38,7 @@ class ReceiptConfirmPage extends StatelessWidget {
                 Spacer(),
                 TextButton(onPressed: () {
                   Navigator.pop(context);
-                }, child: Text("Go Home"))
+                }, child: const Text("Go Home"))
               ],
             )
           ),
