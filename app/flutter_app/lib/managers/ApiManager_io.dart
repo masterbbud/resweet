@@ -5,11 +5,11 @@ import 'package:image_picker/image_picker.dart';
 
 import '../interfaces.dart';
 
-const String url = "127.0.0.1:8000";
+const String url = "resweet-zr7u3u4ibq-uc.a.run.app";
 
 Future<ReceiptSnapshot> processReceipt(XFile file) async {
   final f = File(file.name);
-  final request = http.MultipartRequest("POST", Uri.http(url, "ocr/process"));
+  final request = http.MultipartRequest("POST", Uri.https(url, "ocr/process"));
   request.files.add(await http.MultipartFile.fromPath('file', f.path));
   final response = await request.send();
   final data = await response.stream.bytesToString();
