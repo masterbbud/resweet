@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/interfaces.dart';
-import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter_app/managers/EverythingManager.dart';
-import 'package:flutter_app/screens/NavBar.dart';
 import 'package:flutter_app/screens/ReceiptConfirmPage.dart';
 
 class ReceiptAssignmentPage extends StatefulWidget {
@@ -88,7 +86,6 @@ class ReceiptAssignmentPageState extends State<ReceiptAssignmentPage> {
                   ),
                   SizedBox(
                     width: 100,
-                    child: Expanded(
                       child: Container(
                         color: darken(info.allUsers[selectedUser].color),
                         child: Column(
@@ -119,7 +116,6 @@ class ReceiptAssignmentPageState extends State<ReceiptAssignmentPage> {
                           ],
                         )
                       ),),
-                  )
                 ],
               ),
             ),
@@ -139,10 +135,6 @@ class ReceiptItem extends StatefulWidget {
 }
 
 class ReceiptItemState extends State<ReceiptItem> {
-
-  void initState() {
-  }
-  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
