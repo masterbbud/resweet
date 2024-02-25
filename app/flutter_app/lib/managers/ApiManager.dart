@@ -16,7 +16,7 @@ class APIManager {
 
   final InfoManager info;
 
-  final String url = "127.0.0.1:8000";
+  final String url = "resweet-zr7u3u4ibq-uc.a.run.app";
 
   Future<void> getYourReceipts() async {
     final response = await http
