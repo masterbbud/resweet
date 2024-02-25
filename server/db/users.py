@@ -5,12 +5,13 @@ from .models import User
 
 def add_user(user: User) -> User:
     with server.Session() as s:
-        query = text("""
+        query = s.query(User).from_statement(text("""
             INSERT INTO users (username, display_name, pass_hash)
             VALUES (:username, :display_name, :pass_hash)
-        """)
+            RETURNING *
+        """))
 
-        s.execute(query, {"username": user.username, "display_name": user.display_name, "pass_hash": user.pass_hash})
+        user = s.execute(query, {"username": user.username, "display_name": user.display_name, "pass_hash": user.pass_hash}).one_or_none()[0]
         s.commit()
         return user
     
