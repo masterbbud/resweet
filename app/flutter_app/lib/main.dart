@@ -108,6 +108,7 @@ class _NavPageWrapperState extends State<NavPageWrapper> {
     return Scaffold(
       bottomNavigationBar: NavBar(selectFunc: selectPage),
       body: pages[pageIndex]
+
     );
   }
 }
