@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_app/interfaces.dart';
 import 'package:flutter_app/managers/InfoManager.dart';
 import 'package:http/http.dart' as http;
@@ -69,15 +70,14 @@ class APIManager {
     return;
   }
 
-  Future<void> processReceipt() async {
+  Future<Receipt> processReceipt() async {
     var request = new http.MultipartRequest("POST", Uri.http(url, "process"));
-    request.files.add(await http.MultipartFile.fromPath(
-        'file',
-        'build/brand_receipt8.jpg'
-    ));
-    request.send().then((response) {
-      print(response);
-    });
+    // request.files.add(await http.MultipartFile.fromPath(
+    //     'file',
+    //     'build/brand_receipt8.jpg'
+    // ));
+    var response = await request.send();
+    return null;
   }
 }
 

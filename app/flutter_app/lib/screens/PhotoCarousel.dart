@@ -7,7 +7,24 @@ class PhotoCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider(items: [], options: CarouselOptions(height: 192.66,),
+    return CarouselSlider(
+      options: CarouselOptions(height: 250),
+      items: ['images/shimp.jpg',
+      'images/this_image_goes_so_hard_feel_free_to_screenshot.png',
+      'images/purin i quit.jpg'].map((i) {
+      return Builder(
+        builder: (BuildContext context) {
+          return Container (
+            width: 450,
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: Image.asset(i)
+            )
+          );
+        }
+      );
+    }).toList()
+
 
     );
     throw UnimplementedError();

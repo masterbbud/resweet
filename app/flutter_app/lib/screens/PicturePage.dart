@@ -3,6 +3,7 @@ import 'package:flutter_app/interfaces.dart';
 import 'package:flutter_app/managers/ApiManager.dart';
 import 'package:flutter_app/managers/EverythingManager.dart';
 import 'package:flutter_app/screens/NavBar.dart';
+import 'package:flutter_app/screens/ReceiptEditPage.dart';
 
 
 class PicturePage extends StatefulWidget {
@@ -34,7 +35,12 @@ class PicturePageState extends State<PicturePage> {
                 padding: const EdgeInsets.all(30.0),
                 child: IconButton(iconSize: 70.0, color: Colors.white, icon: Icon(Icons.circle_outlined), onPressed: () {
                   loading = true;
-                  api.processReceipt();
+                  api.processReceipt().then((receipt) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ReceiptEditPage(receipt: receipt)),
+                    );
+                  });
                 },),
               )
             )
