@@ -27,6 +27,22 @@ class Receipt {
       _ => throw const FormatException('Failed to load receipt.'),
     };
   }
+
+  double getTotal() {
+    double total = 0;
+    items.forEach((i) => total += i.price);
+    return total;
+  }
+
+  double getPriceForUser(User user) {
+    double total = 0;
+    items.forEach((i) {
+      if (i.payers.any((u) => u.uuid == user.uuid)) {
+        total += i.price / i.payers.length;
+      }
+    });
+    return total;
+  }
 }
 
 class User {
@@ -126,4 +142,49 @@ Color getColor(int groupIndex) {
     default:
       return Colors.grey;
   }
+}
+
+class ReceiptSnapshot {
+  final double subTotal;
+  final double total;
+  final List<double> taxes;
+  final List<RSItem> items;
+
+  const ReceiptSnapshot({
+    required this.subTotal,
+    required this.total,
+    required this.taxes,
+    required this.items,
+  });
+
+  factory ReceiptSnapshot.fromMap(Map<String, dynamic> json) =>
+    ReceiptSnapshot(
+        subTotal: double.parse(json['subTotal']),
+        total: double.parse(json['total']),
+        taxes: json['taxes'].map<double>((t) => double.parse('$t')).toList(),
+        items: json['lineItems'].map<RSItem>((li) => RSItem.fromMap(li)).toList()
+    );
+
+  @override
+  String toString() {
+    return 'ReceiptSnapshot{subTotal: $subTotal, total: $total, taxes: $taxes, items: $items}';
+  }
+
+  bool isNone() =>
+      subTotal == 0 && total == 0 && items.isEmpty;
+}
+
+class RSItem {
+  final int qty;
+  final String desc;
+  final double price;
+
+  const RSItem({
+    required this.qty,
+    required this.desc,
+    required this.price
+  });
+
+  factory RSItem.fromMap(Map<String, dynamic> json) =>
+      RSItem(qty: json['qty'], desc: json['descClean'], price: double.parse(json['lineTotal']));
 }

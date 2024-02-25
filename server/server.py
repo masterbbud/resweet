@@ -1,13 +1,25 @@
 from fastapi import FastAPI
 from configparser import ConfigParser
+from sqlalchemy.orm import sessionmaker
 import os
 from google.cloud.sql.connector import Connector, IPTypes
 import pg8000
 import sqlalchemy
 import json
+from api import users, groups, auth, receipts, receipt_ocr, ledger
+import db.groups
+from db.models import *
 from fastapi.middleware.cors import CORSMiddleware
 
+from api import receipt_ocr
+
 app = FastAPI()
+app.include_router(users.app)
+app.include_router(groups.app)
+app.include_router(auth.app)
+app.include_router(receipts.app)
+app.include_router(receipt_ocr.router)
+app.include_router(ledger.app)
 
 origins = [
     '*'
@@ -78,6 +90,9 @@ def connect_with_connector() -> sqlalchemy.engine.base.Engine:
     return pool
 
 pool = connect_with_connector()
+Session = sessionmaker(pool, expire_on_commit=False)
+
+
 
 @app.get('/')
 def test():
@@ -115,3 +130,8 @@ def login(user: str):
     return {'users': [{'uuid': '5', 'username': 'joemama24', 'name': 'Joe Mama', 'groupIndex': 0}, {'uuid': '6', 'username': 'joemama25', 'name': 'Jack Mother', 'groupIndex': 1}]}
 
 
+
+def main():
+    pass
+
+main()
