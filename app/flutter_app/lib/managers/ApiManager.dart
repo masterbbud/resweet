@@ -70,14 +70,20 @@ class APIManager {
     return;
   }
 
-  Future<Receipt> processReceipt() async {
+  Future<ReceiptSnapshot> processReceipt() async {
     var request = new http.MultipartRequest("POST", Uri.http(url, "process"));
     // request.files.add(await http.MultipartFile.fromPath(
     //     'file',
     //     'build/brand_receipt8.jpg'
     // ));
     var response = await request.send();
-    return null;
+    return ReceiptSnapshot(subTotal: 0, total: 0, taxes: [], items: [RSItem(qty: 1, desc: "Item Name", price: 1.00)]);
+  }
+
+  Future<Receipt> confirmReceipt(ReceiptSnapshot receipt) async {
+    var request = new http.MultipartRequest("POST", Uri.http(url, "confirm"));
+    var response = await request.send();
+    return Receipt(name: "", date: "", assignee: info.myUser, items: [RItem(name: "Item Name", price: 1.00, payers: [])]);
   }
 }
 
